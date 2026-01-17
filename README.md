@@ -142,6 +142,7 @@ semantic-dropdown-search/
 │   └── adapters.py          # Platform adapters
 │
 ├── 📁 query/
+│   ├── __init__.py
 │   ├── query_builder.py
 │   ├── filters.py
 │   ├── predicates.py
