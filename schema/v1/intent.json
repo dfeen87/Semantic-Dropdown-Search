@@ -1,0 +1,53 @@
+{
+  "version": "v1",
+  "required": true,
+  "description": "The purpose or intent of the content",
+  "values": [
+    {
+      "Research": [
+        "Conceptual",
+        "Applied",
+        "Theoretical",
+        "Empirical",
+        {
+          "Conceptual": [
+            "Early-stage",
+            "Developed",
+            "Mature"
+          ]
+        }
+      ]
+    },
+    {
+      "Documentation": [
+        "Tutorial",
+        "Reference",
+        "Guide",
+        "API Documentation"
+      ]
+    },
+    {
+      "Discussion": [
+        "Question",
+        "Answer",
+        "Debate",
+        "Exploration"
+      ]
+    },
+    {
+      "Opinion": [
+        "Analysis",
+        "Commentary",
+        "Review",
+        "Critique"
+      ]
+    },
+    "Announcement",
+    "Report",
+    "Summary",
+    "Proposal",
+    "Case Study",
+    "News",
+    "Personal Reflection"
+  ]
+}
