@@ -1,0 +1,20 @@
+{
+  "version": "v1",
+  "required": false,
+  "description": "The intended audience for the content",
+  "values": [
+    "General Public",
+    "Students",
+    "Researchers",
+    "Practitioners",
+    "Experts",
+    "Beginners",
+    "Intermediate",
+    "Advanced",
+    "Developers",
+    "Decision Makers",
+    "Policy Makers",
+    "Educators",
+    "Mixed Audience"
+  ]
+}
