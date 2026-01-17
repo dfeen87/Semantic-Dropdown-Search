@@ -129,8 +129,9 @@ semantic-dropdown-search/
 │   └── registry.json
 │
 ├── 📁 core/
+│   ├── CORE_MODULE_SUMMARY.md
 │   ├── __init__.py
-│   ├── validate.py          # Schema validation
+│   ├── validate.py          # Scgema validation
 │   ├── normalize.py         # Canonical normalization
 │   ├── descriptor.py        # Semantic descriptor object
 │   └── errors.py
