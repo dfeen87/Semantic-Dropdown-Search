@@ -1,0 +1,51 @@
+{
+  "version": "v1",
+  "required": true,
+  "description": "The subject domain or field of the content",
+  "values": [
+    {
+      "Science": [
+        "Biology",
+        "Chemistry",
+        "Physics",
+        {
+          "Biology": [
+            "Systems Biology",
+            "Molecular Biology",
+            "Ecology"
+          ]
+        },
+        {
+          "Computer Science": [
+            "Artificial Intelligence",
+            "Systems",
+            "Theory"
+          ]
+        }
+      ]
+    },
+    {
+      "Engineering": [
+        "Software Engineering",
+        "Mechanical Engineering",
+        "Electrical Engineering"
+      ]
+    },
+    {
+      "Medicine": [
+        "Clinical",
+        "Research",
+        "Public Health"
+      ]
+    },
+    "Philosophy",
+    "Mathematics",
+    "Social Sciences",
+    "Humanities",
+    "Business",
+    "Law",
+    "Education",
+    "Arts",
+    "General"
+  ]
+}
