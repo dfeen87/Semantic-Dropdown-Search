@@ -136,6 +136,7 @@ semantic-dropdown-search/
 │   └── errors.py
 │
 ├── 📁 indexer/
+│   ├── __init__.py
 │   ├── index_text.py
 │   ├── serialize.py
 │   └── adapters.py          # Platform adapters
