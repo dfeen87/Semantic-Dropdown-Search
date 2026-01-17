@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import Dict, List, Optional, Set, Any
 from dataclasses import dataclass
 
+from .errors import SchemaError, SchemaVersionError
+
 
 @dataclass
 class ValidationResult:
@@ -68,36 +70,47 @@ class SchemaValidator:
             schema_file: Path to schema file (for error messages)
             
         Raises:
-            ValueError: If schema structure is invalid
+            SchemaError: If schema structure is invalid
         """
+        schema_name = schema_file.name
+        
         # Check for required keys
         if "values" not in schema:
-            raise ValueError(
-                f"Schema {schema_file.name} missing required 'values' key"
+            raise SchemaError(
+                f"Schema missing required 'values' key",
+                schema_file=schema_name
             )
         
         # Check schema version matches expected version
         schema_version = schema.get("version")
         if schema_version and schema_version != self.version:
-            raise ValueError(
-                f"Schema {schema_file.name} declares version '{schema_version}' "
-                f"but loaded into '{self.version}' validator"
+            raise SchemaVersionError(
+                expected=self.version,
+                actual=schema_version,
+                schema_file=schema_name
             )
         
         # Validate values is a list
         if not isinstance(schema["values"], list):
-            raise ValueError(
-                f"Schema {schema_file.name} 'values' must be a list"
+            raise SchemaError(
+                f"Schema 'values' must be a list",
+                schema_file=schema_name
             )
     
     def _load_schemas(self):
         """Load all JSON schemas from schema directory."""
         if not self.schema_dir.exists():
-            raise FileNotFoundError(f"Schema directory not found: {self.schema_dir}")
+            raise SchemaError(
+                f"Schema directory not found: {self.schema_dir}",
+                schema_file=str(self.schema_dir)
+            )
         
         schema_files = list(self.schema_dir.glob("*.json"))
         if not schema_files:
-            raise ValueError(f"No schema files found in {self.schema_dir}")
+            raise SchemaError(
+                f"No schema files found in directory",
+                schema_file=str(self.schema_dir)
+            )
         
         for schema_file in schema_files:
             field_name = schema_file.stem  # e.g., "domain" from "domain.json"
@@ -112,7 +125,10 @@ class SchemaValidator:
                 self._schemas[field_name] = schema
                 
             except json.JSONDecodeError as e:
-                raise ValueError(f"Invalid JSON in {schema_file.name}: {e}")
+                raise SchemaError(
+                    f"Invalid JSON: {e}",
+                    schema_file=schema_file.name
+                )
     
     def get_schema(self, field_name: str) -> Optional[Dict]:
         """Get schema for a specific field."""
