@@ -272,16 +272,6 @@ See `examples/end_to_end.md` for complete workflows.
 
 ---
 
-## Status
-
-**Version:** 0.1 (Early-stage)
-
-- Schemas are expected to evolve conservatively
-- Backward compatibility is a priority
-- Community feedback is welcome
-
----
-
 ## Contributing
 
 Contributions are welcome! Whether it's:
