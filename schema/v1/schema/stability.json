@@ -1,0 +1,22 @@
+{
+  "version": "v1",
+  "required": false,
+  "description": "The validation status and stability of the content",
+  "values": [
+    "Canonical",
+    "Validated",
+    "Peer-reviewed",
+    "Well-established",
+    "Stable",
+    "In Progress",
+    "Draft",
+    "Hypothesis",
+    "Speculation",
+    "Unvalidated",
+    "Experimental",
+    "Deprecated",
+    "Hypothesis (Not yet validated)",
+    "In Progress (Active development)",
+    "Draft (Seeking feedback)"
+  ]
+}
