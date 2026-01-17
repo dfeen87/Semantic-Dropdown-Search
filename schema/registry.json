@@ -1,0 +1,150 @@
+{
+  "schema_registry_version": "1.0.0",
+  "description": "Central registry of all semantic field schemas across versions",
+  "versions": {
+    "v1": {
+      "status": "active",
+      "release_date": "2026-01-17",
+      "description": "Initial schema release with core semantic fields",
+      "breaking_changes": false,
+      "fields": {
+        "domain": {
+          "file": "domain.json",
+          "required": true,
+          "type": "hierarchical",
+          "description": "Subject domain or field of content"
+        },
+        "intent": {
+          "file": "intent.json",
+          "required": true,
+          "type": "hierarchical",
+          "description": "Purpose or intent of the content"
+        },
+        "tone": {
+          "file": "tone.json",
+          "required": false,
+          "type": "flat",
+          "description": "Tone or voice of the content"
+        },
+        "audience": {
+          "file": "audience.json",
+          "required": false,
+          "type": "flat",
+          "description": "Intended audience for the content"
+        },
+        "stability": {
+          "file": "stability.json",
+          "required": false,
+          "type": "flat",
+          "description": "Validation status and stability of content"
+        }
+      }
+    }
+  },
+  "latest_version": "v1",
+  "deprecated_versions": [],
+  "migration_guides": {},
+  "changelog": [
+    {
+      "version": "v1",
+      "date": "2026-01-17",
+      "changes": [
+        "Initial release",
+        "Added domain field (required, hierarchical)",
+        "Added intent field (required, hierarchical)",
+        "Added tone field (optional, flat)",
+        "Added audience field (optional, flat)",
+        "Added stability field (optional, flat)"
+      ]
+    }
+  ],
+  "compatibility_matrix": {
+    "v1": {
+      "forward_compatible_with": [],
+      "backward_compatible_with": []
+    }
+  },
+  "field_types": {
+    "hierarchical": {
+      "description": "Fields that support parent → child relationships",
+      "separator": " → ",
+      "examples": [
+        "Science → Biology",
+        "Research → Conceptual → Early-stage"
+      ]
+    },
+    "flat": {
+      "description": "Fields with simple, non-hierarchical values",
+      "examples": [
+        "Analytical",
+        "Researchers",
+        "Validated"
+      ]
+    }
+  },
+  "validation_rules": {
+    "value_matching": "exact",
+    "normalization": {
+      "whitespace": "collapsed",
+      "hierarchy_separator": "normalized to →",
+      "case": "preserved"
+    },
+    "custom_fields": {
+      "allowed": true,
+      "validated": false,
+      "warning": true
+    }
+  },
+  "extension_guidelines": {
+    "adding_values": {
+      "description": "Adding new values to existing fields",
+      "breaking": false,
+      "process": [
+        "Edit field JSON file",
+        "Add value to values array",
+        "Maintain hierarchical structure if applicable",
+        "Update field documentation"
+      ]
+    },
+    "adding_fields": {
+      "description": "Adding new semantic fields",
+      "breaking": false,
+      "process": [
+        "Create new JSON file in schema version directory",
+        "Follow standard schema structure",
+        "Add entry to this registry",
+        "Update schema README",
+        "Consider backward compatibility"
+      ]
+    },
+    "deprecating_values": {
+      "description": "Removing or deprecating values",
+      "breaking": true,
+      "process": [
+        "Create new schema version",
+        "Document migration path",
+        "Provide migration helpers",
+        "Maintain deprecated version for transition period"
+      ]
+    },
+    "version_increment": {
+      "minor": "Add fields or values without breaking changes",
+      "major": "Breaking changes (removed values, changed semantics)"
+    }
+  },
+  "tools": {
+    "schema_linter": {
+      "description": "Validates schema file structure and consistency",
+      "location": "tools/schema_linter.py"
+    },
+    "migration_helper": {
+      "description": "Assists with migrating descriptors between schema versions",
+      "location": "tools/migration_helper.py"
+    }
+  },
+  "references": {
+    "documentation": "docs/schema_versioning.md",
+    "examples": "examples/",
+    "api": "api/openapi.yaml"
+  }
+}
