@@ -1,0 +1,27 @@
+{
+  "version": "v1",
+  "required": false,
+  "description": "The tone or voice of the content",
+  "values": [
+    "Formal",
+    "Informal",
+    "Analytical",
+    "Cautious",
+    "Confident",
+    "Neutral",
+    "Critical",
+    "Supportive",
+    "Exploratory",
+    "Definitive",
+    "Speculative",
+    "Pragmatic",
+    "Theoretical",
+    "Conversational",
+    "Technical",
+    "Accessible",
+    "Analytical / Cautious",
+    "Analytical / Confident",
+    "Exploratory / Cautious",
+    "Technical / Accessible"
+  ]
+}
