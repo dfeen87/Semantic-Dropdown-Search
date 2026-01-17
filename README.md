@@ -129,7 +129,6 @@ semantic-dropdown-search/
 │   └── registry.json
 │
 ├── 📁 core/
-│   ├── CORE_MODULE_SUMMARY.md
 │   ├── __init__.py
 │   ├── validate.py          # Scgema validation
 │   ├── normalize.py         # Canonical normalization
