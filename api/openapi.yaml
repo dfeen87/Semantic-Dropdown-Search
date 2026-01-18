@@ -1,0 +1,811 @@
+openapi: 3.0.3
+info:
+  title: Semantic Dropdown Search API
+  version: 1.0.0
+  description: |
+    REST API for Semantic Dropdown Search - a semantic indexing layer that replaces 
+    hashtags with structured, human-selected dropdown descriptors.
+    
+    This API allows you to:
+    - Index text content with semantic descriptors
+    - Query indexed content by semantic fields
+    - Validate descriptors against schemas
+    - Export/import indexes
+    
+    **Philosophy**: Structure without surveillance, meaning without manipulation.
+    
+  contact:
+    name: Don Michael Feeney Jr.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local development server
+  - url: https://api.example.com/v1
+    description: Production server
+
+tags:
+  - name: Index
+    description: Indexing text with semantic descriptors
+  - name: Query
+    description: Searching and filtering indexed content
+  - name: Schema
+    description: Schema information and validation
+  - name: Export
+    description: Export and import operations
+
+paths:
+  /index:
+    post:
+      tags: [Index]
+      summary: Add text to index
+      description: Index a text document with its semantic descriptor
+      operationId: addToIndex
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IndexRequest'
+            examples:
+              research_post:
+                $ref: '#/components/examples/ResearchPostIndex'
+              tutorial:
+                $ref: '#/components/examples/TutorialIndex'
+      responses:
+        '201':
+          description: Successfully indexed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedItem'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+    
+    get:
+      tags: [Index]
+      summary: List indexed items
+      description: Get all indexed items with optional pagination
+      operationId: listIndexedItems
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of items to return
+          schema:
+            type: integer
+            default: 100
+            minimum: 1
+            maximum: 1000
+        - name: offset
+          in: query
+          description: Number of items to skip
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+      responses:
+        '200':
+          description: List of indexed items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedItemList'
+
+  /index/{id}:
+    get:
+      tags: [Index]
+      summary: Get indexed item by ID
+      operationId: getIndexedItem
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Item ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Indexed item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedItem'
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    put:
+      tags: [Index]
+      summary: Update indexed item
+      operationId: updateIndexedItem
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Item ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRequest'
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexedItem'
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+    
+    delete:
+      tags: [Index]
+      summary: Delete indexed item
+      operationId: deleteIndexedItem
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Item ID
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Successfully deleted
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /search:
+    post:
+      tags: [Query]
+      summary: Search indexed content
+      description: Query indexed content using semantic descriptors and other criteria
+      operationId: searchContent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+            examples:
+              biology_research:
+                $ref: '#/components/examples/BiologyResearchSearch'
+              tutorials:
+                $ref: '#/components/examples/TutorialSearch'
+              complex_query:
+                $ref: '#/components/examples/ComplexSearch'
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '400':
+          description: Invalid search query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /search/explain:
+    post:
+      tags: [Query]
+      summary: Explain a search query
+      description: Get human-readable explanation of what a search query does
+      operationId: explainQuery
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Query explanation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryExplanation'
+
+  /validate:
+    post:
+      tags: [Schema]
+      summary: Validate a semantic descriptor
+      description: Validate a descriptor against the schema without indexing
+      operationId: validateDescriptor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SemanticDescriptor'
+      responses:
+        '200':
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResult'
+
+  /schema:
+    get:
+      tags: [Schema]
+      summary: Get schema information
+      description: Get information about all available semantic fields and their values
+      operationId: getSchemaInfo
+      parameters:
+        - name: version
+          in: query
+          description: Schema version
+          schema:
+            type: string
+            default: v1
+      responses:
+        '200':
+          description: Schema information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchemaInfo'
+
+  /schema/{field}:
+    get:
+      tags: [Schema]
+      summary: Get field schema
+      description: Get schema for a specific semantic field
+      operationId: getFieldSchema
+      parameters:
+        - name: field
+          in: path
+          required: true
+          description: Field name (domain, intent, tone, audience, stability)
+          schema:
+            type: string
+            enum: [domain, intent, tone, audience, stability]
+        - name: version
+          in: query
+          description: Schema version
+          schema:
+            type: string
+            default: v1
+      responses:
+        '200':
+          description: Field schema
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldSchema'
+        '404':
+          description: Field not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /export:
+    get:
+      tags: [Export]
+      summary: Export index
+      description: Export entire index in specified format
+      operationId: exportIndex
+      parameters:
+        - name: format
+          in: query
+          description: Export format
+          schema:
+            type: string
+            enum: [json, ndjson, csv]
+            default: json
+      responses:
+        '200':
+          description: Exported index
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IndexedItem'
+            application/x-ndjson:
+              schema:
+                type: string
+            text/csv:
+              schema:
+                type: string
+
+  /import:
+    post:
+      tags: [Export]
+      summary: Import index
+      description: Import items into index from JSON array
+      operationId: importIndex
+      parameters:
+        - name: replace
+          in: query
+          description: If true, replace existing index. If false, merge.
+          schema:
+            type: boolean
+            default: false
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/IndexRequest'
+      responses:
+        '200':
+          description: Import summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportResult'
+        '400':
+          description: Invalid import data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /stats:
+    get:
+      tags: [Index]
+      summary: Get index statistics
+      description: Get statistics about the indexed content
+      operationId: getStats
+      responses:
+        '200':
+          description: Index statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexStats'
+
+components:
+  schemas:
+    SemanticDescriptor:
+      type: object
+      description: Semantic metadata describing content
+      properties:
+        domain:
+          type: string
+          description: Subject domain or field
+          example: "Science → Biology → Systems Biology"
+        intent:
+          type: string
+          description: Purpose or intent of content
+          example: "Research → Conceptual → Early-stage"
+        tone:
+          type: string
+          description: Tone or voice of content
+          example: "Analytical / Cautious"
+        audience:
+          type: string
+          description: Intended audience
+          example: "Researchers"
+        stability:
+          type: string
+          description: Validation status and stability
+          example: "Hypothesis (Not yet validated)"
+      required:
+        - domain
+        - intent
+      additionalProperties: true
+
+    IndexRequest:
+      type: object
+      description: Request to index new content
+      properties:
+        text:
+          type: string
+          description: Text content to index
+          example: "Novel findings in systems biology suggest..."
+        descriptor:
+          $ref: '#/components/schemas/SemanticDescriptor'
+        metadata:
+          type: object
+          description: Additional metadata
+          additionalProperties: true
+          example:
+            author: "Dr. Smith"
+            title: "Research Findings"
+            tags: ["biology", "research"]
+        id:
+          type: string
+          description: Optional custom ID (generated if not provided)
+      required:
+        - text
+        - descriptor
+
+    UpdateRequest:
+      type: object
+      description: Request to update indexed item
+      properties:
+        text:
+          type: string
+          description: New text content
+        descriptor:
+          $ref: '#/components/schemas/SemanticDescriptor'
+        metadata:
+          type: object
+          description: Metadata to merge with existing
+          additionalProperties: true
+
+    IndexedItem:
+      type: object
+      description: An indexed text item
+      properties:
+        id:
+          type: string
+          description: Unique item ID
+        text:
+          type: string
+          description: Text content
+        descriptor:
+          $ref: '#/components/schemas/SemanticDescriptor'
+        metadata:
+          type: object
+          description: Additional metadata
+          additionalProperties: true
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+        content_hash:
+          type: string
+          description: SHA-256 hash of content
+      required:
+        - id
+        - text
+        - descriptor
+        - created_at
+        - updated_at
+
+    IndexedItemList:
+      type: object
+      description: Paginated list of indexed items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndexedItem'
+        total:
+          type: integer
+          description: Total number of items
+        limit:
+          type: integer
+          description: Items per page
+        offset:
+          type: integer
+          description: Offset in results
+
+    SearchRequest:
+      type: object
+      description: Search query for indexed content
+      properties:
+        filters:
+          type: object
+          description: Field filters
+          properties:
+            domain:
+              type: string
+              description: Domain to match (supports hierarchy)
+            domain_exact:
+              type: boolean
+              description: Require exact domain match
+              default: false
+            intent:
+              type: string
+              description: Intent to match (supports hierarchy)
+            intent_exact:
+              type: boolean
+              description: Require exact intent match
+              default: false
+            tone:
+              type: string
+              description: Tone to match
+            audience:
+              type: string
+              description: Audience to match
+            stability:
+              type: string
+              description: Stability to match
+        text_search:
+          type: string
+          description: Search text content
+        metadata:
+          type: object
+          description: Metadata filters
+          additionalProperties: true
+        created_after:
+          type: string
+          format: date-time
+          description: Filter by creation date
+        created_before:
+          type: string
+          format: date-time
+          description: Filter by creation date
+        sort_by:
+          type: string
+          enum: [created, updated, relevance]
+          default: created
+        sort_order:
+          type: string
+          enum: [asc, desc]
+          default: desc
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 100
+        offset:
+          type: integer
+          minimum: 0
+          default: 0
+
+    SearchResponse:
+      type: object
+      description: Search results
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndexedItem'
+        total:
+          type: integer
+          description: Total matching items
+        query_explanation:
+          type: string
+          description: Human-readable query explanation
+        limit:
+          type: integer
+        offset:
+          type: integer
+        statistics:
+          type: object
+          description: Result statistics
+          properties:
+            field_distribution:
+              type: object
+              description: Distribution of field values in results
+              additionalProperties:
+                type: object
+                additionalProperties:
+                  type: integer
+
+    QueryExplanation:
+      type: object
+      description: Human-readable query explanation
+      properties:
+        query:
+          type: string
+          description: Natural language query description
+        predicate_tree:
+          type: string
+          description: Visual representation of query logic
+        estimated_results:
+          type: integer
+          description: Estimated number of matches
+
+    ValidationResult:
+      type: object
+      description: Descriptor validation result
+      properties:
+        valid:
+          type: boolean
+          description: Whether descriptor is valid
+        errors:
+          type: array
+          items:
+            type: string
+          description: Validation errors
+        warnings:
+          type: array
+          items:
+            type: string
+          description: Validation warnings
+
+    ValidationError:
+      type: object
+      description: Validation error response
+      properties:
+        error:
+          type: string
+          example: "Validation failed"
+        details:
+          $ref: '#/components/schemas/ValidationResult'
+
+    SchemaInfo:
+      type: object
+      description: Schema information
+      properties:
+        version:
+          type: string
+          description: Schema version
+        fields:
+          type: object
+          description: Available semantic fields
+          additionalProperties:
+            type: object
+            properties:
+              required:
+                type: boolean
+              description:
+                type: string
+              type:
+                type: string
+                enum: [hierarchical, flat]
+
+    FieldSchema:
+      type: object
+      description: Schema for a specific field
+      properties:
+        version:
+          type: string
+        required:
+          type: boolean
+        description:
+          type: string
+        values:
+          type: array
+          description: Valid values for this field
+          items:
+            oneOf:
+              - type: string
+              - type: object
+
+    ImportResult:
+      type: object
+      description: Result of import operation
+      properties:
+        imported:
+          type: integer
+          description: Number of items imported
+        failed:
+          type: integer
+          description: Number of items that failed
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              index:
+                type: integer
+              error:
+                type: string
+
+    IndexStats:
+      type: object
+      description: Index statistics
+      properties:
+        total_items:
+          type: integer
+          description: Total indexed items
+        field_values:
+          type: object
+          description: Unique values per field
+          additionalProperties:
+            type: integer
+        created_range:
+          type: object
+          properties:
+            earliest:
+              type: string
+              format: date-time
+            latest:
+              type: string
+              format: date-time
+
+    Error:
+      type: object
+      description: Error response
+      properties:
+        error:
+          type: string
+          description: Error message
+        details:
+          type: string
+          description: Additional error details
+      required:
+        - error
+
+  examples:
+    ResearchPostIndex:
+      summary: Research post
+      value:
+        text: "Novel findings in systems biology suggest that cellular oscillations may play a crucial role in..."
+        descriptor:
+          domain: "Science → Biology → Systems Biology"
+          intent: "Research → Conceptual → Early-stage"
+          tone: "Analytical / Cautious"
+          audience: "Researchers"
+          stability: "Hypothesis (Not yet validated)"
+        metadata:
+          author: "Dr. Smith"
+          institution: "University of Biology"
+          tags: ["systems biology", "oscillations", "hypothesis"]
+
+    TutorialIndex:
+      summary: Tutorial
+      value:
+        text: "This tutorial will teach you the basics of Python programming, starting with variables and data types..."
+        descriptor:
+          domain: "Engineering → Software Engineering"
+          intent: "Documentation → Tutorial"
+          tone: "Conversational"
+          audience: "Beginners"
+        metadata:
+          author: "Jane Doe"
+          difficulty: "beginner"
+          tags: ["python", "programming", "tutorial"]
+
+    BiologyResearchSearch:
+      summary: Biology research
+      value:
+        filters:
+          domain: "Science → Biology"
+          domain_exact: false
+          intent: "Research"
+          intent_exact: false
+        sort_by: "created"
+        sort_order: "desc"
+        limit: 20
+
+    TutorialSearch:
+      summary: Tutorials for beginners
+      value:
+        filters:
+          intent: "Documentation → Tutorial"
+          audience: "Beginners"
+        sort_by: "created"
+        limit: 10
+
+    ComplexSearch:
+      summary: Complex query
+      value:
+        filters:
+          domain: "Science"
+          domain_exact: false
+          stability: "Peer-reviewed"
+        text_search: "machine learning"
+        metadata:
+          tags: "research"
+        created_after: "2024-01-01T00:00:00Z"
+        limit: 50
