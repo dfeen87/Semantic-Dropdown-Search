@@ -1,0 +1,133 @@
+{
+  "valid_descriptors": [
+    {
+      "name": "minimal",
+      "descriptor": {
+        "domain": "Science",
+        "intent": "Research"
+      }
+    },
+    {
+      "name": "complete_research",
+      "descriptor": {
+        "domain": "Science → Biology → Systems Biology",
+        "intent": "Research → Conceptual → Early-stage",
+        "tone": "Analytical / Cautious",
+        "audience": "Researchers",
+        "stability": "Hypothesis (Not yet validated)"
+      }
+    },
+    {
+      "name": "tutorial",
+      "descriptor": {
+        "domain": "Engineering → Software Engineering",
+        "intent": "Documentation → Tutorial",
+        "tone": "Conversational",
+        "audience": "Beginners"
+      }
+    },
+    {
+      "name": "peer_reviewed",
+      "descriptor": {
+        "domain": "Science → Biology",
+        "intent": "Research → Empirical",
+        "tone": "Formal",
+        "audience": "Researchers",
+        "stability": "Peer-reviewed"
+      }
+    },
+    {
+      "name": "opinion",
+      "descriptor": {
+        "domain": "Science → Computer Science → Artificial Intelligence",
+        "intent": "Opinion → Analysis",
+        "tone": "Critical",
+        "audience": "Mixed Audience"
+      }
+    }
+  ],
+  "invalid_descriptors": [
+    {
+      "name": "missing_required",
+      "descriptor": {
+        "domain": "Science"
+      },
+      "expected_error": "Missing required fields: intent"
+    },
+    {
+      "name": "invalid_domain",
+      "descriptor": {
+        "domain": "Fake Domain",
+        "intent": "Research"
+      },
+      "expected_error": "Invalid domain value"
+    },
+    {
+      "name": "invalid_intent",
+      "descriptor": {
+        "domain": "Science",
+        "intent": "Fake Intent"
+      },
+      "expected_error": "Invalid intent value"
+    },
+    {
+      "name": "invalid_tone",
+      "descriptor": {
+        "domain": "Science",
+        "intent": "Research",
+        "tone": "Fake Tone"
+      },
+      "expected_error": "Invalid tone value"
+    }
+  ],
+  "hierarchical_values": {
+    "domain": [
+      "Science",
+      "Science → Biology",
+      "Science → Biology → Systems Biology",
+      "Science → Computer Science",
+      "Science → Computer Science → Artificial Intelligence",
+      "Engineering",
+      "Engineering → Software Engineering"
+    ],
+    "intent": [
+      "Research",
+      "Research → Conceptual",
+      "Research → Conceptual → Early-stage",
+      "Research → Applied",
+      "Documentation",
+      "Documentation → Tutorial",
+      "Documentation → Reference"
+    ]
+  },
+  "flat_values": {
+    "tone": [
+      "Formal",
+      "Informal",
+      "Analytical",
+      "Cautious",
+      "Conversational",
+      "Technical",
+      "Critical",
+      "Analytical / Cautious"
+    ],
+    "audience": [
+      "General Public",
+      "Students",
+      "Researchers",
+      "Beginners",
+      "Advanced",
+      "Developers",
+      "Mixed Audience"
+    ],
+    "stability": [
+      "Canonical",
+      "Validated",
+      "Peer-reviewed",
+      "Stable",
+      "Draft",
+      "Hypothesis",
+      "Hypothesis (Not yet validated)"
+    ]
+  }
+}
