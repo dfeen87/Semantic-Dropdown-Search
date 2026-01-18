@@ -1,0 +1,15 @@
+{
+  "text": "We explore a deterministic framework for semantic classification using hierarchical descriptors instead of keyword-based tagging.",
+  "descriptor": {
+    "domain": "Science → Computer Science → Information Retrieval",
+    "intent": "Research → Conceptual",
+    "tone": "Analytical",
+    "audience": "Researchers",
+    "stability": "Hypothesis (Not yet validated)"
+  },
+  "metadata": {
+    "author": "D. Feeney",
+    "source": "preprint",
+    "year": 2026
+  }
+}
