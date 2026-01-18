@@ -1,0 +1,8 @@
+{
+  "filters": {
+    "intent": "Research",
+    "tone": "Analytical",
+    "stability": "Hypothesis (Not yet validated)"
+  },
+  "description": "Find early-stage analytical research content that has not yet been validated."
+}
