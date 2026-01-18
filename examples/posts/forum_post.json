@@ -1,0 +1,14 @@
+{
+  "text": "Has anyone tried replacing free-text tags with validated dropdowns? Curious about performance and UX tradeoffs.",
+  "descriptor": {
+    "domain": "Technology → Software Engineering",
+    "intent": "Discussion → Question",
+    "tone": "Informal",
+    "audience": "Developers",
+    "stability": "Draft"
+  },
+  "metadata": {
+    "platform": "forum",
+    "thread_id": "ux-3421"
+  }
+}
