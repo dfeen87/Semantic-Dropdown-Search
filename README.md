@@ -105,83 +105,85 @@ Every text object is paired with a **semantic descriptor object** chosen from dr
 ```
 semantic-dropdown-search/
 │
-├── 📄 README.md
-├── 📄 LICENSE
-├── 📄 CITATION.cff
-├── 📄 CHANGELOG.md
-├── 📄 VERSION
+├── 📄 README.md              # Project overview, quick start, philosophy
+├── 📄 LICENSE                # MIT license
+├── 📄 CITATION.cff           # Academic / research citation metadata
+├── 📄 CHANGELOG.md           # Release history and notable changes
+├── 📄 VERSION                # Current package version (v1.0.0)
+├── 📁 .github/               # GitHub metadata (funding, workflows, templates)
 │
-docs/
-├── 📁 modules/
-│   ├── core_module.md
-│   ├── indexer_module.md
-│   ├── query_module.md
-│   └── api_module.md
-├── philosophy.md
-├── design_principles.md
-├── schema_versioning.md
-├── integration_guide.md
-├── faq.md
+├── 📁 docs/                  # Conceptual and integration documentation
+│   ├── 📁 modules/           # Module-level technical documentation
+│   │   ├── core_module.md    # Core semantics, validation, normalization
+│   │   ├── indexer_module.md # Indexing and persistence layer
+│   │   ├── query_module.md   # Query engine and predicates
+│   │   └── api_module.md     # API surface and contracts
+│   ├── philosophy.md         # Design philosophy and guiding principles
+│   ├── design_principles.md  # Non-negotiable architectural rules
+│   ├── schema_versioning.md  # Schema lifecycle and compatibility rules
+│   ├── integration_guide.md  # How to embed in real systems
+│   └── faq.md                # Common questions and guarantees
 │
-├── 📁 schema/
-│   ├── v1/
-│   │   ├── domain.json
-│   │   ├── intent.json
-│   │   ├── tone.json
-│   │   ├── audience.json
-│   │   ├── stability.json
-│   │   └── README.md
-│   └── registry.json
+├── 📁 schema/                # Semantic schema definitions
+│   ├── v1/                   # Stable schema version v1
+│   │   ├── domain.json       # Content domain taxonomy
+│   │   ├── intent.json       # Content intent taxonomy
+│   │   ├── tone.json         # Tone and communication style
+│   │   ├── audience.json     # Intended audience classification
+│   │   ├── stability.json    # Maturity / confidence signaling
+│   │   └── README.md         # Schema usage and conventions
+│   └── registry.json         # Schema version registry and metadata
 │
-├── 📁 core/
+├── 📁 core/                  # Semantic foundations
 │   ├── __init__.py
-│   ├── validate.py          # Scgema validation
-│   ├── normalize.py         # Canonical normalization
-│   ├── descriptor.py        # Semantic descriptor object
-│   └── errors.py
+│   ├── validate.py           # Schema validation engine
+│   ├── normalize.py          # Canonical normalization logic
+│   ├── descriptor.py         # SemanticDescriptor data model
+│   └── errors.py             # Core exception hierarchy
 │
-├── 📁 indexer/
+├── 📁 indexer/               # Text indexing and storage
 │   ├── __init__.py
-│   ├── index_text.py
-│   ├── serialize.py
-│   └── adapters.py          # Platform adapters
+│   ├── index_text.py         # IndexedText + TextIndex implementations
+│   ├── serialize.py          # JSON / NDJSON / CSV serialization
+│   └── adapters.py           # Storage adapters (file, memory, directory)
 │
-├── 📁 query/
+├── 📁 query/                 # Query engine
 │   ├── __init__.py
-│   ├── query_builder.py
-│   ├── filters.py
-│   ├── predicates.py
-│   └── explain.py           # Human-readable query explanation
+│   ├── query_builder.py      # Fluent query construction API
+│   ├── filters.py            # High-level filter helpers
+│   ├── predicates.py         # Predicate primitives and logic
+│   └── explain.py            # Human-readable query explanations
 │
-├── 📁 api/
-│   ├── openapi.yaml
-│   └── examples/
+├── 📁 api/                   # External API definitions
+│   ├── openapi.yaml          # OpenAPI specification
+│   └── 📁 examples/          # API request/response examples
 │       ├── index_request.json
 │       └── search_request.json
 │
-├── 📁 examples/
-│   ├── posts/
+├── 📁 examples/              # End-to-end usage examples
+│   ├── 📁 posts/             # Example content descriptors
 │   │   ├── research_post.json
 │   │   ├── blog_post.json
 │   │   └── forum_post.json
-│   ├── queries/
+│   ├── 📁 queries/           # Example query definitions
 │   │   ├── cautious_research.json
 │   │   └── early_stage_filter.json
-│   └── end_to_end.md
+│   └── end_to_end.md         # Full indexing → querying walkthrough
 │
-├── 📁 tests/
-│   ├── tests.md
+├── 📁 tests/                 # Test suite
+│   ├── tests.md              # How to run and interpret tests
 │   ├── __init__.py
-│   ├── test_schema.py
-│   ├── test_validation.py
-│   ├── run_tests.py
-│   ├── test_query.py
-│   └── fixtures/
+│   ├── test_schema.py        # Schema validation tests
+│   ├── test_validation.py   # Descriptor validation tests
+│   ├── test_query.py        # Query engine tests
+│   ├── run_tests.py         # Test runner
+│   └── 📁 fixtures/
 │        └── sample_descriptors.json
 │
-└── 📁 tools/
-    ├── schema_linter.py
-    └── migration_helper.py
+└── 📁 tools/                 # Maintenance and migration utilities
+    ├── schema_linter.py      # Schema validation and consistency checks
+    └── migration_helper.py   # Schema migration and compatibility tooling
+
 ```
 
 > **Note:** You can adopt only the schema, or the schema plus helpers — whatever fits your needs.
