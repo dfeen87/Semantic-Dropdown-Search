@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+title: Semantic Dropdown Search
+message: >
+  If you use Semantic Dropdown Search in your work, please cite it as below.
+type: software
+authors:
+  - family-names: Feeney
+    given-names: Don Michael
+    email: dfeen87@gmail.com
+license: MIT
+repository-code: https://github.com/dfeen87/semantic-dropdown-search
+keywords:
+  - semantic-search
+  - structured-metadata
+  - dropdown-taxonomy
+  - content-discovery
+  - search-engine
+  - schema-driven
+  - developer-tools
+abstract: >
+  Semantic Dropdown Search is a schema-driven, open-source framework
+  for indexing and querying text using structured dropdown semantics
+  instead of hashtags. It enables deterministic, explainable search
+  across social platforms, documentation systems, and content pipelines.
+version: 1.0.0
+date-released: 2026-01-18
