@@ -170,10 +170,13 @@ docs/
 │   └── end_to_end.md
 │
 ├── 📁 tests/
+│   ├── __init__.py
 │   ├── test_schema.py
 │   ├── test_validation.py
+│   ├── run_tests.py
 │   ├── test_query.py
 │   └── fixtures/
+│        └── sample_descriptors.json
 │
 └── 📁 tools/
     ├── schema_linter.py
