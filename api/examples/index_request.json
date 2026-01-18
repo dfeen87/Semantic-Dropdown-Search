@@ -1,0 +1,220 @@
+{
+  "examples": [
+    {
+      "name": "Research Post",
+      "description": "Index a research post with early-stage hypothesis",
+      "request": {
+        "text": "Novel findings in systems biology suggest that cellular oscillations may play a crucial role in gene expression regulation. Our preliminary data indicates a 40% correlation between oscillation frequency and transcription rates in yeast cells.",
+        "descriptor": {
+          "domain": "Science → Biology → Systems Biology",
+          "intent": "Research → Conceptual → Early-stage",
+          "tone": "Analytical / Cautious",
+          "audience": "Researchers",
+          "stability": "Hypothesis (Not yet validated)"
+        },
+        "metadata": {
+          "author": "Dr. Alice Smith",
+          "institution": "University of Biology",
+          "lab": "Systems Biology Lab",
+          "date": "2024-01-15",
+          "tags": ["systems biology", "oscillations", "gene expression", "hypothesis"],
+          "citations": 0,
+          "preprint_url": "https://example.com/preprint/12345"
+        }
+      }
+    },
+    {
+      "name": "Peer-Reviewed Study",
+      "description": "Index a validated, peer-reviewed research article",
+      "request": {
+        "text": "In this peer-reviewed study, we demonstrate through rigorous experimental validation that CRISPR-Cas9 efficiency can be improved by 25% through temperature optimization. Results were replicated across three independent laboratories.",
+        "descriptor": {
+          "domain": "Science → Biology → Molecular Biology",
+          "intent": "Research → Empirical",
+          "tone": "Formal",
+          "audience": "Researchers",
+          "stability": "Peer-reviewed"
+        },
+        "metadata": {
+          "author": "Dr. Bob Johnson",
+          "institution": "Medical Research Institute",
+          "publication": "Nature Biotechnology",
+          "doi": "10.1234/example.2024.001",
+          "date": "2024-03-20",
+          "tags": ["CRISPR", "molecular biology", "peer-reviewed"],
+          "citations": 15
+        }
+      }
+    },
+    {
+      "name": "Python Tutorial",
+      "description": "Index a beginner-friendly programming tutorial",
+      "request": {
+        "text": "This tutorial will teach you the basics of Python programming, starting with variables and data types. We'll cover strings, numbers, lists, and dictionaries, with plenty of examples and exercises to help you learn by doing.",
+        "descriptor": {
+          "domain": "Engineering → Software Engineering",
+          "intent": "Documentation → Tutorial",
+          "tone": "Conversational",
+          "audience": "Beginners"
+        },
+        "metadata": {
+          "author": "Jane Doe",
+          "website": "LearnPython.com",
+          "difficulty": "beginner",
+          "duration_minutes": 30,
+          "language": "Python 3.11",
+          "tags": ["python", "programming", "tutorial", "beginner"],
+          "views": 1520,
+          "rating": 4.8
+        }
+      }
+    },
+    {
+      "name": "Advanced ML Tutorial",
+      "description": "Index an advanced machine learning guide",
+      "request": {
+        "text": "Advanced machine learning techniques: In this comprehensive guide, we explore transformer architectures, attention mechanisms, and their applications in natural language processing. Prerequisites include linear algebra, calculus, and basic neural networks.",
+        "descriptor": {
+          "domain": "Science → Computer Science → Artificial Intelligence",
+          "intent": "Documentation → Tutorial",
+          "tone": "Technical",
+          "audience": "Advanced"
+        },
+        "metadata": {
+          "author": "Prof. David Lee",
+          "institution": "AI Research Lab",
+          "difficulty": "advanced",
+          "prerequisites": ["linear algebra", "neural networks", "Python"],
+          "duration_minutes": 120,
+          "tags": ["machine learning", "transformers", "NLP", "advanced"],
+          "github_repo": "https://github.com/example/ml-tutorial"
+        }
+      }
+    },
+    {
+      "name": "Opinion Analysis",
+      "description": "Index an analytical opinion piece",
+      "request": {
+        "text": "Analysis of current AI trends and implications: The rapid advancement of large language models raises important questions about regulation, safety, and societal impact. This piece examines recent developments and their potential consequences.",
+        "descriptor": {
+          "domain": "Science → Computer Science → Artificial Intelligence",
+          "intent": "Opinion → Analysis",
+          "tone": "Critical",
+          "audience": "Mixed Audience"
+        },
+        "metadata": {
+          "author": "Tech Analyst",
+          "publication": "Tech Review Quarterly",
+          "date": "2024-02-10",
+          "tags": ["AI", "opinion", "analysis", "policy"],
+          "comments": 45,
+          "shares": 230
+        }
+      }
+    },
+    {
+      "name": "Documentation Reference",
+      "description": "Index technical documentation",
+      "request": {
+        "text": "API Reference for the Semantic Dropdown Search library. Complete documentation of all classes, methods, and parameters. Includes usage examples and best practices for integration.",
+        "descriptor": {
+          "domain": "Engineering → Software Engineering",
+          "intent": "Documentation → Reference",
+          "tone": "Technical",
+          "audience": "Developers",
+          "stability": "Stable"
+        },
+        "metadata": {
+          "version": "0.1.0",
+          "last_updated": "2024-01-18",
+          "tags": ["documentation", "API", "reference"],
+          "language": "Python"
+        }
+      }
+    },
+    {
+      "name": "Discussion Question",
+      "description": "Index a forum discussion question",
+      "request": {
+        "text": "Question: How do I optimize memory usage when working with large datasets in Python? I'm processing 10GB CSV files and running into memory errors. What are best practices?",
+        "descriptor": {
+          "domain": "Engineering → Software Engineering",
+          "intent": "Discussion → Question",
+          "tone": "Informal",
+          "audience": "Developers"
+        },
+        "metadata": {
+          "author": "user123",
+          "forum": "Developer Community",
+          "date": "2024-01-17",
+          "tags": ["python", "memory", "question", "optimization"],
+          "views": 234,
+          "replies": 8
+        }
+      }
+    },
+    {
+      "name": "Case Study",
+      "description": "Index a real-world case study",
+      "request": {
+        "text": "Case Study: How Company X reduced infrastructure costs by 40% using serverless architecture. This detailed analysis covers the migration process, challenges encountered, and lessons learned.",
+        "descriptor": {
+          "domain": "Engineering → Software Engineering",
+          "intent": "Case Study",
+          "tone": "Pragmatic",
+          "audience": "Decision Makers"
+        },
+        "metadata": {
+          "company": "Company X",
+          "author": "DevOps Team",
+          "date": "2024-01-10",
+          "tags": ["case study", "serverless", "cost optimization"],
+          "industry": "technology"
+        }
+      }
+    },
+    {
+      "name": "Minimal Example",
+      "description": "Minimal required fields only",
+      "request": {
+        "text": "This is a minimal example with only required fields.",
+        "descriptor": {
+          "domain": "General",
+          "intent": "Documentation → Tutorial"
+        }
+      }
+    },
+    {
+      "name": "With Custom Fields",
+      "description": "Example with custom semantic fields",
+      "request": {
+        "text": "Example demonstrating custom fields beyond the standard schema.",
+        "descriptor": {
+          "domain": "Science → Computer Science",
+          "intent": "Research → Conceptual",
+          "language": "English",
+          "license": "CC-BY-4.0",
+          "version": "1.0"
+        },
+        "metadata": {
+          "custom_field_1": "value1",
+          "custom_field_2": "value2"
+        }
+      }
+    }
+  ],
+  "notes": [
+    "The 'text' field is required and should contain the actual content to index",
+    "The 'descriptor' object must include at least 'domain' and 'intent' (required fields)",
+    "Other descriptor fields (tone, audience, stability) are optional",
+    "The 'metadata' object is entirely optional and can contain any additional data",
+    "Custom fields in the descriptor are allowed but will not be validated",
+    "The 'id' field is optional - if not provided, a UUID will be generated"
+  ],
+  "validation_tips": [
+    "Use the /validate endpoint to check descriptors before indexing",
+    "Hierarchical values use the arrow separator: →",
+    "Values must match schema exactly (after normalization)",
+    "Check /schema endpoint for valid values for each field"
+  ]
+}
