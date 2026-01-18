@@ -1,0 +1,313 @@
+{
+  "examples": [
+    {
+      "name": "Simple Domain Filter",
+      "description": "Find all content in a specific domain",
+      "request": {
+        "filters": {
+          "domain": "Science → Biology",
+          "domain_exact": false
+        },
+        "limit": 20
+      }
+    },
+    {
+      "name": "Research Posts in Biology",
+      "description": "Find research posts in biology or its subfields",
+      "request": {
+        "filters": {
+          "domain": "Science → Biology",
+          "domain_exact": false,
+          "intent": "Research",
+          "intent_exact": false
+        },
+        "sort_by": "created",
+        "sort_order": "desc",
+        "limit": 20
+      }
+    },
+    {
+      "name": "Peer-Reviewed Research",
+      "description": "Find all peer-reviewed research across all domains",
+      "request": {
+        "filters": {
+          "intent": "Research",
+          "intent_exact": false,
+          "stability": "Peer-reviewed"
+        },
+        "sort_by": "created",
+        "sort_order": "desc"
+      }
+    },
+    {
+      "name": "Beginner Tutorials",
+      "description": "Find tutorials aimed at beginners",
+      "request": {
+        "filters": {
+          "intent": "Documentation → Tutorial",
+          "audience": "Beginners"
+        },
+        "sort_by": "created",
+        "limit": 10
+      }
+    },
+    {
+      "name": "AI Content",
+      "description": "Find all content related to Artificial Intelligence",
+      "request": {
+        "filters": {
+          "domain": "Science → Computer Science → Artificial Intelligence",
+          "domain_exact": false
+        },
+        "limit": 50
+      }
+    },
+    {
+      "name": "Cautious Early-Stage Research",
+      "description": "Find cautious, early-stage research hypotheses",
+      "request": {
+        "filters": {
+          "intent": "Research → Conceptual → Early-stage",
+          "tone": "Analytical / Cautious",
+          "stability": "Hypothesis (Not yet validated)"
+        },
+        "sort_by": "created",
+        "sort_order": "desc"
+      }
+    },
+    {
+      "name": "Text Search",
+      "description": "Search for specific keywords in text",
+      "request": {
+        "text_search": "machine learning",
+        "filters": {
+          "domain": "Science → Computer Science",
+          "domain_exact": false
+        },
+        "limit": 30
+      }
+    },
+    {
+      "name": "By Author",
+      "description": "Find content by specific author",
+      "request": {
+        "metadata": {
+          "author": "Dr. Smith"
+        },
+        "sort_by": "created",
+        "sort_order": "desc"
+      }
+    },
+    {
+      "name": "Recent Content",
+      "description": "Find content created after a specific date",
+      "request": {
+        "created_after": "2024-01-01T00:00:00Z",
+        "filters": {
+          "domain": "Science",
+          "domain_exact": false
+        },
+        "sort_by": "created",
+        "sort_order": "desc",
+        "limit": 100
+      }
+    },
+    {
+      "name": "Complex Multi-Filter",
+      "description": "Combine multiple filters for precise results",
+      "request": {
+        "filters": {
+          "domain": "Science → Biology",
+          "domain_exact": false,
+          "intent": "Research",
+          "intent_exact": false,
+          "stability": "Peer-reviewed",
+          "audience": "Researchers"
+        },
+        "text_search": "CRISPR",
+        "created_after": "2023-01-01T00:00:00Z",
+        "sort_by": "created",
+        "sort_order": "desc",
+        "limit": 20
+      }
+    },
+    {
+      "name": "Exact Domain Match",
+      "description": "Match exact domain without descendants",
+      "request": {
+        "filters": {
+          "domain": "Science → Biology",
+          "domain_exact": true
+        }
+      }
+    },
+    {
+      "name": "Tutorials in Any Domain",
+      "description": "Find all tutorials regardless of domain",
+      "request": {
+        "filters": {
+          "intent": "Documentation → Tutorial"
+        },
+        "sort_by": "created",
+        "sort_order": "desc",
+        "limit": 50
+      }
+    },
+    {
+      "name": "Critical Analysis",
+      "description": "Find critical analysis and opinion pieces",
+      "request": {
+        "filters": {
+          "intent": "Opinion → Analysis",
+          "tone": "Critical"
+        }
+      }
+    },
+    {
+      "name": "Paginated Results",
+      "description": "Get second page of results",
+      "request": {
+        "filters": {
+          "domain": "Science",
+          "domain_exact": false
+        },
+        "limit": 20,
+        "offset": 20
+      }
+    },
+    {
+      "name": "Documentation for Developers",
+      "description": "Find technical documentation for developers",
+      "request": {
+        "filters": {
+          "intent": "Documentation",
+          "intent_exact": false,
+          "audience": "Developers",
+          "tone": "Technical"
+        }
+      }
+    },
+    {
+      "name": "Stable Content Only",
+      "description": "Find only validated and stable content",
+      "request": {
+        "filters": {
+          "stability": "Stable"
+        },
+        "sort_by": "updated",
+        "sort_order": "desc"
+      }
+    },
+    {
+      "name": "Mixed Audience Content",
+      "description": "Find content suitable for general audiences",
+      "request": {
+        "filters": {
+          "audience": "Mixed Audience"
+        },
+        "limit": 30
+      }
+    },
+    {
+      "name": "Empty Search",
+      "description": "Get all items with default sorting",
+      "request": {
+        "limit": 100,
+        "offset": 0
+      }
+    },
+    {
+      "name": "By Multiple Metadata Fields",
+      "description": "Filter by multiple metadata criteria",
+      "request": {
+        "metadata": {
+          "author": "Dr. Smith",
+          "institution": "University of Biology",
+          "tags": "systems biology"
+        }
+      }
+    },
+    {
+      "name": "Date Range",
+      "description": "Find content within a date range",
+      "request": {
+        "created_after": "2024-01-01T00:00:00Z",
+        "created_before": "2024-12-31T23:59:59Z",
+        "sort_by": "created",
+        "sort_order": "asc"
+      }
+    }
+  ],
+  "notes": [
+    "All filters are optional - omit filters to search all content",
+    "Hierarchical filters (domain, intent) support partial matching with domain_exact=false",
+    "Text search is case-insensitive",
+    "Metadata filters match exact values",
+    "Default limit is 100, maximum is 1000",
+    "Sort options: created, updated, relevance (relevance requires text_search)",
+    "Timestamps should be in ISO 8601 format"
+  ],
+  "query_patterns": [
+    {
+      "pattern": "Find research in a field",
+      "example": {
+        "filters": {
+          "domain": "Science → Biology",
+          "intent": "Research",
+          "intent_exact": false
+        }
+      }
+    },
+    {
+      "pattern": "Find validated content",
+      "example": {
+        "filters": {
+          "stability": "Peer-reviewed"
+        }
+      }
+    },
+    {
+      "pattern": "Find beginner-friendly material",
+      "example": {
+        "filters": {
+          "audience": "Beginners",
+          "intent": "Documentation → Tutorial"
+        }
+      }
+    },
+    {
+      "pattern": "Find early-stage hypotheses",
+      "example": {
+        "filters": {
+          "stability": "Hypothesis (Not yet validated)",
+          "intent": "Research → Conceptual → Early-stage"
+        }
+      }
+    },
+    {
+      "pattern": "Search within domain",
+      "example": {
+        "text_search": "neural networks",
+        "filters": {
+          "domain": "Science → Computer Science",
+          "domain_exact": false
+        }
+      }
+    }
+  ],
+  "response_fields": [
+    "items: Array of matching indexed items",
+    "total: Total number of matches (before pagination)",
+    "query_explanation: Human-readable description of the query",
+    "limit: Items per page",
+    "offset: Current offset",
+    "statistics: Field distribution and other stats (optional)"
+  ],
+  "tips": [
+    "Use domain_exact=false to include all subfields (e.g., 'Science' includes 'Science → Biology')",
+    "Combine filters for precise results",
+    "Use text_search for full-text queries",
+    "Check query_explanation in response to understand what was searched",
+    "Use /search/explain endpoint to preview query without executing"
+  ]
+}
