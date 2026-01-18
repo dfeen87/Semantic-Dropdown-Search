@@ -1,0 +1,15 @@
+{
+  "text": "Why hashtags fail at meaning, and how structured semantic dropdowns can fix modern content discovery.",
+  "descriptor": {
+    "domain": "Technology → Software Engineering",
+    "intent": "Opinion → Educational",
+    "tone": "Accessible",
+    "audience": "General Public",
+    "stability": "Published"
+  },
+  "metadata": {
+    "author": "Guest Contributor",
+    "platform": "blog",
+    "estimated_read_time": "6 min"
+  }
+}
