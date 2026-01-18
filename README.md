@@ -111,12 +111,17 @@ semantic-dropdown-search/
 ├── 📄 CHANGELOG.md
 ├── 📄 VERSION
 │
-├── 📁 docs/
-│   ├── philosophy.md
-│   ├── design_principles.md
-│   ├── schema_versioning.md
-│   ├── integration_guide.md
-│   └── faq.md
+docs/
+├── 📁 modules/
+│   ├── core_module.md
+│   ├── indexer_module.md
+│   ├── query_module.md
+│   └── api_module.md
+├── philosophy.md
+├── design_principles.md
+├── schema_versioning.md
+├── integration_guide.md
+├── faq.md
 │
 ├── 📁 schema/
 │   ├── v1/
