@@ -163,6 +163,7 @@ class TextIndex:
         text: Optional[str] = None,
         descriptor: Optional[SemanticDescriptor] = None,
         metadata: Optional[Dict[str, Any]] = None,
+        allow_duplicates: bool = False,
     ) -> Optional[IndexedText]:
         """Update an indexed text item."""
         item = self._items.get(id)
@@ -170,6 +171,13 @@ class TextIndex:
             return None
         
         if text is not None:
+            new_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
+            if not allow_duplicates and new_hash in self._hash_to_id:
+                existing_id = self._hash_to_id[new_hash]
+                if existing_id != id:
+                    raise IndexingError(
+                        f"Duplicate content detected (existing id: {existing_id})"
+                    )
             self._hash_to_id.pop(item.content_hash, None)
             item.update_text(text)
             self._hash_to_id[item.content_hash] = id
@@ -211,11 +219,12 @@ class TextIndex:
     
     def filter_by_prefix(self, field_name: str, prefix: str) -> List[IndexedText]:
         """Filter indexed texts by hierarchical prefix."""
+        delimiter = f"{prefix} → "
         return [
             item
             for item in self._items.values()
             if (value := item.descriptor.get_field(field_name))
-            and value.startswith(prefix)
+            and (value == prefix or value.startswith(delimiter))
         ]
     
     def get_all(self) -> List[IndexedText]:
