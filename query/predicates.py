@@ -14,9 +14,9 @@ from datetime import datetime
 
 from ..indexer.index_text import IndexedText
 from ..core.normalize import (
+    HIERARCHY_SEPARATOR,
     get_hierarchy_path,
     get_hierarchy_depth,
-    is_hierarchical,
 )
 
 
@@ -121,7 +121,7 @@ class HierarchyMatches(Predicate):
         if self.exact:
             return value == self.path
 
-        return value.startswith(self.path)
+        return value == self.path or value.startswith(f"{self.path}{HIERARCHY_SEPARATOR}")
 
     def explain(self) -> str:
         return (
@@ -146,7 +146,7 @@ class HierarchyDepth(Predicate):
 
     def test(self, item: IndexedText) -> bool:
         value = item.descriptor.get_field(self.field_name)
-        if value is None or not is_hierarchical(value):
+        if value is None:
             return False
 
         depth = get_hierarchy_depth(value)
