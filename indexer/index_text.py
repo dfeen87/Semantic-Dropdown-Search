@@ -14,8 +14,8 @@ from datetime import datetime
 import hashlib
 import uuid
 
-from ..core.descriptor import SemanticDescriptor
-from ..core.errors import IndexingError
+from core.descriptor import SemanticDescriptor
+from core.errors import IndexingError
 
 
 @dataclass
@@ -50,10 +50,10 @@ class IndexedText:
         """Compute SHA-256 hash of text content."""
         return hashlib.sha256(self.text.encode("utf-8")).hexdigest()
     
-    def update_text(self, new_text: str):
+    def update_text(self, new_text: str, content_hash: Optional[str] = None):
         """Update text content and refresh hash and timestamp."""
         self.text = new_text
-        self.content_hash = self._compute_hash()
+        self.content_hash = content_hash or self._compute_hash()
         self.updated_at = datetime.utcnow()
     
     def update_descriptor(self, new_descriptor: SemanticDescriptor):
@@ -179,8 +179,8 @@ class TextIndex:
                         f"Duplicate content detected (existing id: {existing_id})"
                     )
             self._hash_to_id.pop(item.content_hash, None)
-            item.update_text(text)
-            self._hash_to_id[item.content_hash] = id
+            item.update_text(text, content_hash=new_hash)
+            self._hash_to_id[new_hash] = id
         
         if descriptor is not None:
             if self.validate_on_add:

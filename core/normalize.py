@@ -41,8 +41,8 @@ def normalize_whitespace(text: str) -> str:
     Returns:
         Normalized text
     """
-    # First, protect hierarchy separators by temporarily replacing them
-    protected = text.replace(HIERARCHY_SEPARATOR, "<<<HIERARCHY>>>")
+    # Protect hierarchy separators with flexible spacing around the arrow.
+    protected = re.sub(r"\s*→\s*", "<<<HIERARCHY>>>", text)
     
     # Collapse whitespace
     normalized = re.sub(r'\s+', ' ', protected)

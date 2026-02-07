@@ -12,8 +12,8 @@ from typing import List, Optional, Set, Any, Callable
 from datetime import datetime
 from dataclasses import dataclass
 
-from ..indexer.index_text import IndexedText, TextIndex
-from .predicates import (
+from indexer.index_text import IndexedText, TextIndex
+from query.predicates import (
     Predicate,
     FieldEquals,
     FieldIn,
@@ -32,7 +32,7 @@ from .predicates import (
     NotPredicate,
     CustomPredicate,
 )
-from ..core.errors import QueryError
+from core.errors import QueryError
 
 
 # -------------------------
@@ -227,6 +227,42 @@ class QueryBuilder:
     def offset(self, n: int) -> "QueryBuilder":
         self._offset = n
         return self
+
+    # ---------------------
+    # UTILITIES
+    # ---------------------
+
+    def clone(self) -> "QueryBuilder":
+        """Create a shallow copy of the current query builder."""
+        cloned = QueryBuilder(self._index)
+        cloned._predicates = list(self._predicates)
+        cloned._limit = self._limit
+        cloned._offset = self._offset
+        cloned._sort_key = self._sort_key
+        cloned._sort_reverse = self._sort_reverse
+        return cloned
+
+    def reset(self) -> "QueryBuilder":
+        """Reset predicates, sorting, and pagination."""
+        self._predicates = []
+        self._limit = None
+        self._offset = 0
+        self._sort_key = None
+        self._sort_reverse = False
+        return self
+
+    def count(self) -> int:
+        """Return the number of items matching the query."""
+        return len(self.execute().items)
+
+    def first(self) -> Optional[IndexedText]:
+        """Return the first matching item, if any."""
+        results = self.execute().items
+        return results[0] if results else None
+
+    def exists(self) -> bool:
+        """Return True if any items match the query."""
+        return self.count() > 0
 
     # ---------------------
     # EXECUTION

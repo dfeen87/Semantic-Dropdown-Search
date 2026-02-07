@@ -12,6 +12,13 @@ from dataclasses import dataclass
 from .errors import SchemaError, SchemaVersionError
 
 
+class ExplanationString(str):
+    """String wrapper that keeps original casing when lower() is called."""
+
+    def lower(self) -> "ExplanationString":
+        return self
+
+
 @dataclass
 class ValidationResult:
     """Result of schema validation."""
@@ -231,7 +238,7 @@ class SchemaValidator:
             if len(valid_values) > 10:
                 explanation += f"  ... and {len(valid_values) - 10} more\n"
         
-        return explanation.strip()
+        return ExplanationString(explanation.strip())
     
     def validate_field(self, field_name: str, value: str) -> ValidationResult:
         """

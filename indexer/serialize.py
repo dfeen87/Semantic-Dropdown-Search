@@ -14,9 +14,9 @@ from typing import List, Dict, Any, Optional
 from pathlib import Path
 from io import StringIO
 
-from .index_text import IndexedText
-from ..core.descriptor import SemanticDescriptor
-from ..core.errors import IndexingError
+from indexer.index_text import IndexedText
+from core.descriptor import SemanticDescriptor
+from core.errors import IndexingError
 
 
 class Serializer:

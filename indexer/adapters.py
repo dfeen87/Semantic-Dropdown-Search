@@ -11,15 +11,15 @@ from typing import List, Optional, Dict, Any
 from pathlib import Path
 from abc import ABC, abstractmethod
 
-from .index_text import IndexedText, TextIndex
-from .serialize import (
+from indexer.index_text import IndexedText, TextIndex
+from indexer.serialize import (
     JSONSerializer,
     NDJSONSerializer,
     CSVSerializer,
     save_to_file,
     load_from_file,
 )
-from ..core.errors import IndexingError
+from core.errors import IndexingError
 
 
 # -------------------------
