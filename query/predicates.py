@@ -12,8 +12,8 @@ from typing import Callable, Set, Any, Optional
 from abc import ABC, abstractmethod
 from datetime import datetime
 
-from ..indexer.index_text import IndexedText
-from ..core.normalize import (
+from indexer.index_text import IndexedText
+from core.normalize import (
     HIERARCHY_SEPARATOR,
     get_hierarchy_path,
     get_hierarchy_depth,

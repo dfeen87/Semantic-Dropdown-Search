@@ -10,8 +10,8 @@ Filters are convenience utilities, not a query language.
 from typing import List, Set, Optional, Dict, Any
 from datetime import datetime
 
-from ..indexer.index_text import IndexedText, TextIndex
-from .predicates import (
+from indexer.index_text import IndexedText, TextIndex
+from query.predicates import (
     Predicate,
     FieldEquals,
     FieldIn,

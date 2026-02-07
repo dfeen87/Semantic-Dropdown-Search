@@ -14,8 +14,8 @@ from datetime import datetime
 import hashlib
 import uuid
 
-from ..core.descriptor import SemanticDescriptor
-from ..core.errors import IndexingError
+from core.descriptor import SemanticDescriptor
+from core.errors import IndexingError
 
 
 @dataclass
