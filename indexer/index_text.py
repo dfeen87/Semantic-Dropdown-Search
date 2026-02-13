@@ -10,7 +10,7 @@ No ranking, scoring, or inference is performed here.
 
 from typing import Dict, List, Optional, Set, Any
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 import hashlib
 import uuid
 
@@ -37,8 +37,8 @@ class IndexedText:
     text: str
     descriptor: SemanticDescriptor
     metadata: Dict[str, Any] = field(default_factory=dict)
-    created_at: datetime = field(default_factory=datetime.utcnow)
-    updated_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     content_hash: str = field(default="")
     
     def __post_init__(self):
@@ -54,12 +54,12 @@ class IndexedText:
         """Update text content and refresh hash and timestamp."""
         self.text = new_text
         self.content_hash = content_hash or self._compute_hash()
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(timezone.utc)
     
     def update_descriptor(self, new_descriptor: SemanticDescriptor):
         """Update semantic descriptor and refresh timestamp."""
         self.descriptor = new_descriptor
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(timezone.utc)
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary representation."""
@@ -194,7 +194,7 @@ class TextIndex:
         
         if metadata is not None:
             item.metadata.update(metadata)
-            item.updated_at = datetime.utcnow()
+            item.updated_at = datetime.now(timezone.utc)
         
         return item
     

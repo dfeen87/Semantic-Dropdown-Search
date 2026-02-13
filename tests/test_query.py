@@ -3,7 +3,7 @@ Tests for query functionality.
 """
 
 import unittest
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from core import SemanticDescriptor
 from indexer import TextIndex, IndexedText
@@ -481,7 +481,7 @@ class TestQueryWithTimestamps(unittest.TestCase):
     
     def test_created_after_filter(self):
         """Test filtering by creation date."""
-        yesterday = datetime.now() - timedelta(days=1)
+        yesterday = datetime.now(timezone.utc) - timedelta(days=1)
         
         result = (QueryBuilder(self.index)
                  .where_created_after(yesterday)
@@ -492,7 +492,7 @@ class TestQueryWithTimestamps(unittest.TestCase):
     
     def test_created_before_filter(self):
         """Test filtering before a date."""
-        tomorrow = datetime.now() + timedelta(days=1)
+        tomorrow = datetime.now(timezone.utc) + timedelta(days=1)
         
         result = (QueryBuilder(self.index)
                  .where_created_before(tomorrow)
