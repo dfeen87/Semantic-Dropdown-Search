@@ -336,7 +336,7 @@ class SemanticDescriptor:
         """Developer representation."""
         return self.__str__()
     
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """Check equality with another descriptor."""
         if not isinstance(other, SemanticDescriptor):
             return False
