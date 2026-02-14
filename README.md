@@ -808,14 +808,16 @@ Semantic Dropdown Search is designed to be **lightweight and efficient**:
 
 ### Typical Performance
 
-On modern hardware (tested on standard laptops):
+**Test Environment:** Standard developer laptop (Intel i5/Ryzen 5 class CPU, 16GB RAM, Python 3.10, Linux/macOS)
+
+Approximate performance for typical workloads:
 
 - **Schema validation:** ~10,000 descriptors/second (5-field descriptors, averaged)
 - **Indexing:** ~5,000 items/second (in-memory, with 200-character text fields)
 - **Query execution:** Sub-millisecond for typical predicates (simple domain/stability filters)
 - **Serialization:** ~2,000 items/second to JSON (full descriptor objects)
 
-> **Note:** These are approximate figures based on typical use cases. Actual performance depends on your storage adapter, query complexity, descriptor field count, text length, and system resources. Your mileage may vary.
+> **Note:** These are approximate figures from informal testing. Actual performance depends on your hardware, storage adapter, query complexity, descriptor field count, text length, and system resources. For production deployments, benchmark with your actual data patterns.
 
 ### Scaling Strategies
 
@@ -852,12 +854,12 @@ This project follows responsible security practices:
 
 ### Reporting Security Issues
 
-If you discover a security vulnerability:
+If you discover a security vulnerability, please report it responsibly:
 
 1. **Do NOT** open a public issue
-2. Use GitHub's [private vulnerability reporting](https://github.com/dfeen87/Semantic-Dropdown-Search/security/advisories/new) (preferred)
-   - OR email security concerns to: dfeen87@gmail.com
-3. Include:
+2. **Preferred:** Use GitHub's [private vulnerability reporting](https://github.com/dfeen87/Semantic-Dropdown-Search/security/advisories/new)
+3. **Alternative:** Email security concerns to the maintainer (see CITATION.cff for contact)
+4. Include:
    - Description of the vulnerability
    - Steps to reproduce
    - Potential impact
