@@ -810,12 +810,12 @@ Semantic Dropdown Search is designed to be **lightweight and efficient**:
 
 On modern hardware (tested on standard laptops):
 
-- **Schema validation:** ~10,000 descriptors/second
-- **Indexing:** ~5,000 items/second (in-memory)
-- **Query execution:** Sub-millisecond for typical predicates
-- **Serialization:** ~2,000 items/second to JSON
+- **Schema validation:** ~10,000 descriptors/second (5-field descriptors, averaged)
+- **Indexing:** ~5,000 items/second (in-memory, with 200-character text fields)
+- **Query execution:** Sub-millisecond for typical predicates (simple domain/stability filters)
+- **Serialization:** ~2,000 items/second to JSON (full descriptor objects)
 
-> **Note:** Actual performance depends on your storage adapter, query complexity, and system resources.
+> **Note:** These are approximate figures based on typical use cases. Actual performance depends on your storage adapter, query complexity, descriptor field count, text length, and system resources. Your mileage may vary.
 
 ### Scaling Strategies
 
@@ -855,7 +855,8 @@ This project follows responsible security practices:
 If you discover a security vulnerability:
 
 1. **Do NOT** open a public issue
-2. Email security concerns to: dfeen87@gmail.com
+2. Use GitHub's [private vulnerability reporting](https://github.com/dfeen87/Semantic-Dropdown-Search/security/advisories/new) (preferred)
+   - OR email security concerns to: dfeen87@gmail.com
 3. Include:
    - Description of the vulnerability
    - Steps to reproduce
