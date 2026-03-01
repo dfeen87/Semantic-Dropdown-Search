@@ -25,6 +25,7 @@
 - [API Quick Reference](#api-quick-reference)
 - [Documentation](#documentation)
 - [Contributing](#contributing)
+- [Acknowledgements](#acknowledgements)
 - [License](#license)
 - [Citation](#citation)
 
@@ -647,6 +648,12 @@ python -m unittest discover tests -v
 - Show empathy towards other contributors
 
 Please open an issue or pull request for any contributions.
+
+---
+
+## Acknowledgements
+
+I would like to acknowledge **Microsoft Copilot**, **Anthropic Claude**, and **OpenAI ChatGPT** for their meaningful assistance in refining concepts, improving clarity, and strengthening the overall quality of this work.
 
 ---
 
