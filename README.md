@@ -2,7 +2,6 @@
 
 > A lightweight, MIT-licensed semantic indexing layer that replaces hashtags with structured, human-selected dropdown descriptors.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.0.0-orange.svg)](VERSION)
 [![CI](https://github.com/dfeen87/Semantic-Dropdown-Search/workflows/CI/badge.svg)](https://github.com/dfeen87/Semantic-Dropdown-Search/actions)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
@@ -91,7 +90,6 @@ EOF
 | **Breaking Changes** | ⚠️ Only in major versions |
 | **Python Support** | 3.9, 3.10, 3.11, 3.12 |
 | **Dependencies** | Zero (core functionality) |
-| **License** | MIT |
 
 ---
 
@@ -265,7 +263,7 @@ Every text object is paired with a **semantic descriptor object** chosen from dr
 semantic-dropdown-search/
 │
 ├── 📄 README.md              # Project overview, quick start, philosophy
-├── 📄 LICENSE                # MIT license
+├── 📄 LICENSE                
 ├── 📄 CITATION.cff           # Academic / research citation metadata
 ├── 📄 CHANGELOG.md           # Release history and notable changes
 ├── 📄 VERSION                # Current package version (v1.0.0)
@@ -659,9 +657,8 @@ I would like to acknowledge **Microsoft Copilot**, **Anthropic Claude**, and **O
 
 ## License
 
-**MIT License** — use it, ship it, improve it.
-
-See [LICENSE](LICENSE) for full details.
+This project is available for **non‑commercial use only** under the terms of the included LICENSE file.  
+Commercial use requires a separate paid license.
 
 ---
 
