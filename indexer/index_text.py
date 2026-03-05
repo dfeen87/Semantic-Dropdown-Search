@@ -18,6 +18,9 @@ from core.descriptor import SemanticDescriptor
 from core.errors import IndexingError
 
 
+_REQUIRED_SERIALIZATION_KEYS = {"id", "text", "created_at", "updated_at"}
+
+
 @dataclass
 class IndexedText:
     """
@@ -76,6 +79,12 @@ class IndexedText:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "IndexedText":
         """Create IndexedText from dictionary."""
+        missing = _REQUIRED_SERIALIZATION_KEYS - data.keys()
+        if missing:
+            raise IndexingError(
+                f"Missing required keys in serialized data: {missing}"
+            )
+
         descriptor = SemanticDescriptor.from_dict(data.get("descriptor", {}))
         
         return cls(
@@ -108,7 +117,7 @@ class TextIndex:
         text: str,
         descriptor: SemanticDescriptor,
         metadata: Optional[Dict[str, Any]] = None,
-        id: Optional[str] = None,
+        item_id: Optional[str] = None,
         allow_duplicates: bool = False,
     ) -> IndexedText:
         """Add text with semantic descriptor to index."""
@@ -121,8 +130,12 @@ class TextIndex:
                     + "; ".join(result.errors)
                 )
         
-        if id is None:
-            id = str(uuid.uuid4())
+        if item_id is None:
+            item_id = str(uuid.uuid4())
+        elif item_id in self._items:
+            raise IndexingError(
+                f"Item with ID '{item_id}' already exists. Use update() instead."
+            )
         
         content_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
         
@@ -133,25 +146,25 @@ class TextIndex:
             )
         
         item = IndexedText(
-            id=id,
+            id=item_id,
             text=text,
             descriptor=descriptor,
             metadata=metadata or {},
             content_hash=content_hash,
         )
         
-        self._items[id] = item
-        self._hash_to_id[content_hash] = id
+        self._items[item_id] = item
+        self._hash_to_id[content_hash] = item_id
         
         return item
     
-    def get(self, id: str) -> Optional[IndexedText]:
+    def get(self, item_id: str) -> Optional[IndexedText]:
         """Retrieve indexed text by ID."""
-        return self._items.get(id)
+        return self._items.get(item_id)
     
-    def remove(self, id: str) -> bool:
+    def remove(self, item_id: str) -> bool:
         """Remove indexed text by ID."""
-        item = self._items.pop(id, None)
+        item = self._items.pop(item_id, None)
         if item:
             self._hash_to_id.pop(item.content_hash, None)
             return True
@@ -159,14 +172,14 @@ class TextIndex:
     
     def update(
         self,
-        id: str,
+        item_id: str,
         text: Optional[str] = None,
         descriptor: Optional[SemanticDescriptor] = None,
         metadata: Optional[Dict[str, Any]] = None,
         allow_duplicates: bool = False,
     ) -> Optional[IndexedText]:
         """Update an indexed text item."""
-        item = self._items.get(id)
+        item = self._items.get(item_id)
         if not item:
             return None
         
@@ -174,13 +187,13 @@ class TextIndex:
             new_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
             if not allow_duplicates and new_hash in self._hash_to_id:
                 existing_id = self._hash_to_id[new_hash]
-                if existing_id != id:
+                if existing_id != item_id:
                     raise IndexingError(
                         f"Duplicate content detected (existing id: {existing_id})"
                     )
             self._hash_to_id.pop(item.content_hash, None)
             item.update_text(text, content_hash=new_hash)
-            self._hash_to_id[new_hash] = id
+            self._hash_to_id[new_hash] = item_id
         
         if descriptor is not None:
             if self.validate_on_add:
@@ -243,6 +256,12 @@ class TextIndex:
         """Return number of indexed items."""
         return len(self._items)
     
+    def bulk_load(self, items: List["IndexedText"]) -> None:
+        """Load items directly into the index, bypassing validation and dedup checks."""
+        for item in items:
+            self._items[item.id] = item
+            self._hash_to_id[item.content_hash] = item.id
+    
     def clear(self):
         """Clear the index."""
         self._items.clear()
@@ -265,10 +284,8 @@ class TextIndex:
             schema_version=schema_version,
         )
         
-        for item_data in data:
-            item = IndexedText.from_dict(item_data)
-            index._items[item.id] = item
-            index._hash_to_id[item.content_hash] = item.id
+        items = [IndexedText.from_dict(item_data) for item_data in data]
+        index.bulk_load(items)
         
         return index
 

@@ -100,9 +100,7 @@ class FileAdapter(StorageAdapter):
             schema_version=self.schema_version,
         )
 
-        for item in items:
-            index._items[item.id] = item
-            index._hash_to_id[item.content_hash] = item.id
+        index.bulk_load(items)
 
         return index
 
@@ -148,9 +146,7 @@ class MemoryAdapter(StorageAdapter):
             schema_version=self.schema_version,
         )
 
-        for item in index.get_all():
-            copy._items[item.id] = item
-            copy._hash_to_id[item.content_hash] = item.id
+        copy.bulk_load(index.get_all())
 
         self._storage = copy
 
@@ -193,7 +189,12 @@ class DirectoryAdapter(StorageAdapter):
         self.schema_version = schema_version
 
     def _item_path(self, item_id: str) -> Path:
-        return self.directory / f"{item_id}.{self.format}"
+        path = (self.directory / f"{item_id}.{self.format}").resolve()
+        if not path.is_relative_to(self.directory.resolve()):
+            raise IndexingError(
+                f"Invalid item ID (path traversal detected): {item_id!r}"
+            )
+        return path
 
     def save(self, index: TextIndex):
         self.directory.mkdir(parents=True, exist_ok=True)
@@ -216,9 +217,7 @@ class DirectoryAdapter(StorageAdapter):
 
         for path in self.directory.glob(f"*.{self.format}"):
             items = load_from_file(path, format=self.format)
-            for item in items:
-                index._items[item.id] = item
-                index._hash_to_id[item.content_hash] = item.id
+            index.bulk_load(items)
 
         return index
 
@@ -283,17 +282,17 @@ class IndexManager:
 
         return item
 
-    def get(self, id: str) -> Optional[IndexedText]:
-        return self.index.get(id)
+    def get(self, item_id: str) -> Optional[IndexedText]:
+        return self.index.get(item_id)
 
-    def remove(self, id: str) -> bool:
-        removed = self.index.remove(id)
+    def remove(self, item_id: str) -> bool:
+        removed = self.index.remove(item_id)
         if removed and self.auto_save:
             self.save()
         return removed
 
-    def update(self, id: str, **kwargs) -> Optional[IndexedText]:
-        item = self.index.update(id, **kwargs)
+    def update(self, item_id: str, **kwargs) -> Optional[IndexedText]:
+        item = self.index.update(item_id, **kwargs)
         if item and self.auto_save:
             self.save()
         return item

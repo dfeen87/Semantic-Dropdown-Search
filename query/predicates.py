@@ -281,6 +281,19 @@ class UpdatedAfter(Predicate):
         return f"updated after {self.timestamp.isoformat()}"
 
 
+class UpdatedBefore(Predicate):
+    """Match items updated before a timestamp."""
+
+    def __init__(self, timestamp: datetime):
+        self.timestamp = timestamp
+
+    def test(self, item: IndexedText) -> bool:
+        return item.updated_at < self.timestamp
+
+    def explain(self) -> str:
+        return f"updated before {self.timestamp.isoformat()}"
+
+
 # -------------------------
 # LOGICAL COMBINATORS
 # -------------------------

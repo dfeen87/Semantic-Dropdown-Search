@@ -23,3 +23,6 @@ jobs:
 
       - name: Run tests
         run: python -m unittest discover tests
+
+      - name: Lint schemas
+        run: python tools/schema_linter.py

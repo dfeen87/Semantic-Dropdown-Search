@@ -8,7 +8,7 @@ This module provides the fundamental building blocks:
 - Errors: Custom exceptions
 """
 
-from .descriptor import SemanticDescriptor
+from .descriptor import SemanticDescriptor, STANDARD_FIELDS
 from .validate import (
     SchemaValidator,
     ValidationResult,
@@ -40,6 +40,7 @@ from .errors import (
 __all__ = [
     # Main descriptor class
     'SemanticDescriptor',
+    'STANDARD_FIELDS',
     
     # Validation
     'SchemaValidator',
@@ -70,4 +71,4 @@ __all__ = [
 
 
 # Version info
-__version__ = '1.0.0'
+__version__ = '1.4.0'

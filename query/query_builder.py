@@ -27,6 +27,7 @@ from query.predicates import (
     CreatedAfter,
     CreatedBefore,
     UpdatedAfter,
+    UpdatedBefore,
     AndPredicate,
     OrPredicate,
     NotPredicate,
@@ -184,6 +185,10 @@ class QueryBuilder:
         self._predicates.append(UpdatedAfter(timestamp))
         return self
 
+    def where_updated_before(self, timestamp: datetime) -> "QueryBuilder":
+        self._predicates.append(UpdatedBefore(timestamp))
+        return self
+
     # ---------------------
     # CUSTOM / LOGICAL
     # ---------------------
@@ -221,10 +226,14 @@ class QueryBuilder:
         return self.order_by(lambda item: item.updated_at, reverse=descending)
 
     def limit(self, n: int) -> "QueryBuilder":
+        if n < 0:
+            raise QueryError(f"limit must be non-negative, got {n}")
         self._limit = n
         return self
 
     def offset(self, n: int) -> "QueryBuilder":
+        if n < 0:
+            raise QueryError(f"offset must be non-negative, got {n}")
         self._offset = n
         return self
 
@@ -252,12 +261,12 @@ class QueryBuilder:
         return self
 
     def count(self) -> int:
-        """Return the number of items matching the query."""
-        return len(self.execute().items)
+        """Return the total number of items matching the query (before pagination)."""
+        return self.execute().total
 
     def first(self) -> Optional[IndexedText]:
         """Return the first matching item, if any."""
-        results = self.execute().items
+        results = self.clone().limit(1).execute().items
         return results[0] if results else None
 
     def exists(self) -> bool:
