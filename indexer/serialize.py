@@ -15,7 +15,7 @@ from pathlib import Path
 from io import StringIO
 
 from indexer.index_text import IndexedText
-from core.descriptor import SemanticDescriptor
+from core.descriptor import SemanticDescriptor, STANDARD_FIELDS
 from core.errors import IndexingError
 
 
@@ -27,7 +27,7 @@ class Serializer:
         raise NotImplementedError
 
     @staticmethod
-    def deserialize(data: str) -> List[IndexedText]:
+    def deserialize(data: str, max_items: Optional[int] = None) -> List[IndexedText]:
         raise NotImplementedError
 
     @staticmethod
@@ -55,8 +55,13 @@ class JSONSerializer(Serializer):
         )
 
     @staticmethod
-    def deserialize(data: str) -> List[IndexedText]:
+    def deserialize(data: str, max_items: Optional[int] = None) -> List[IndexedText]:
         items_data = json.loads(data)
+        if max_items is not None and len(items_data) > max_items:
+            raise IndexingError(
+                f"Input exceeds max_items limit of {max_items} "
+                f"(got {len(items_data)} records)"
+            )
         return [IndexedText.from_dict(d) for d in items_data]
 
     @staticmethod
@@ -102,10 +107,14 @@ class NDJSONSerializer(Serializer):
         )
 
     @staticmethod
-    def deserialize(data: str) -> List[IndexedText]:
+    def deserialize(data: str, max_items: Optional[int] = None) -> List[IndexedText]:
         items = []
         for line in data.splitlines():
             if line.strip():
+                if max_items is not None and len(items) >= max_items:
+                    raise IndexingError(
+                        f"Input exceeds max_items limit of {max_items}"
+                    )
                 items.append(
                     IndexedText.from_dict(json.loads(line))
                 )
@@ -186,7 +195,7 @@ class CSVSerializer(Serializer):
     def _unflatten(row: Dict[str, str]) -> IndexedText:
         descriptor_data = {
             k: row[k]
-            for k in ["domain", "intent", "tone", "audience", "stability"]
+            for k in sorted(STANDARD_FIELDS)
             if row.get(k)
         }
 
@@ -212,9 +221,16 @@ class CSVSerializer(Serializer):
         return output.getvalue()
 
     @staticmethod
-    def deserialize(data: str) -> List[IndexedText]:
+    def deserialize(data: str, max_items: Optional[int] = None) -> List[IndexedText]:
         reader = csv.DictReader(StringIO(data))
-        return [CSVSerializer._unflatten(row) for row in reader]
+        items = []
+        for row in reader:
+            if max_items is not None and len(items) >= max_items:
+                raise IndexingError(
+                    f"Input exceeds max_items limit of {max_items}"
+                )
+            items.append(CSVSerializer._unflatten(row))
+        return items
 
     @staticmethod
     def serialize_to_file(items: List[IndexedText], filepath: Path):

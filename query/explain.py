@@ -7,6 +7,7 @@ This module provides human-readable explanations of queries and query results.
 from typing import List, Dict, Any, Optional
 from collections import Counter
 
+from core.descriptor import STANDARD_FIELDS
 from indexer import IndexedText
 from .predicates import Predicate
 from .query_builder import QueryResult
@@ -73,10 +74,9 @@ def analyze_field_distribution(items: List[IndexedText]) -> Dict[str, Counter]:
     """
     Analyze distribution of field values in items.
     """
-    fields = ['domain', 'intent', 'tone', 'audience', 'stability']
     distribution = {}
 
-    for field_name in fields:
+    for field_name in sorted(STANDARD_FIELDS):
         counter = Counter()
         for item in items:
             value = item.descriptor.get_field(field_name)

@@ -29,25 +29,42 @@ def load_json(path: Path) -> Dict:
 def extract_values(values: List, seen: Set[str], path: str = ""):
     """
     Recursively extract values and detect duplicates.
+
+    Duplicate detection uses the full path (e.g. "Science/Biology") so that
+    the same short label can legitimately appear as both a leaf value and as
+    a parent key at different levels of the hierarchy.
+
+    A node is allowed to appear once as a string leaf (selectable without
+    subcategory) AND once as a dict parent (selectable with subcategories).
+    Only true duplicates — two strings or two dicts with the same full path —
+    are reported as errors.
     """
     for item in values:
+        full_path = ""  # will be set below for each item type
+
         if isinstance(item, str):
-            if item in seen:
+            full_path = f"{path}/{item}" if path else item
+            # String leaves are tracked with a "_leaf" suffix
+            leaf_key = f"{full_path}::leaf"
+            if leaf_key in seen:
                 raise SchemaLintError(f"Duplicate value detected: '{item}'")
-            seen.add(item)
+            seen.add(leaf_key)
 
         elif isinstance(item, dict):
             for key, children in item.items():
-                if key in seen:
+                full_path = f"{path}/{key}" if path else key
+                # Dict parents are tracked with a "_parent" suffix
+                parent_key = f"{full_path}::parent"
+                if parent_key in seen:
                     raise SchemaLintError(f"Duplicate value detected: '{key}'")
-                seen.add(key)
+                seen.add(parent_key)
 
                 if not isinstance(children, list):
                     raise SchemaLintError(
                         f"Children of '{key}' must be a list"
                     )
 
-                extract_values(children, seen, f"{path}/{key}")
+                extract_values(children, seen, full_path)
         else:
             raise SchemaLintError(
                 f"Invalid schema entry type: {type(item).__name__}"
@@ -88,14 +105,14 @@ def lint_registry(schema_root: Path):
     if "versions" not in registry:
         raise SchemaLintError("registry.json missing 'versions' key")
 
-    for version, fields in registry["versions"].items():
+    for version, version_info in registry["versions"].items():
         version_dir = schema_root / version
         if not version_dir.exists():
             raise SchemaLintError(
                 f"Registry references missing directory: {version}"
             )
 
-        for field in fields:
+        for field in version_info.get("fields", {}).keys():
             schema_file = version_dir / f"{field}.json"
             if not schema_file.exists():
                 raise SchemaLintError(

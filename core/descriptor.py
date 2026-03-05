@@ -15,6 +15,11 @@ from .normalize import normalize_descriptor, normalize_value
 from .errors import ValidationError
 
 
+# Canonical set of standard semantic fields.
+# Defined once here and imported wherever needed to avoid duplication.
+STANDARD_FIELDS: frozenset = frozenset({'domain', 'intent', 'tone', 'audience', 'stability'})
+
+
 @dataclass
 class SemanticDescriptor:
     """
@@ -64,10 +69,9 @@ class SemanticDescriptor:
         self.stability = normalized.get('stability')
         
         # Update custom fields
-        standard_fields = {'domain', 'intent', 'tone', 'audience', 'stability'}
         self.custom_fields = {
             k: v for k, v in normalized.items() 
-            if k not in standard_fields
+            if k not in STANDARD_FIELDS
         }
     
     @classmethod
@@ -82,10 +86,8 @@ class SemanticDescriptor:
             SemanticDescriptor instance
         """
         # Separate standard fields from custom fields
-        standard_fields = {'domain', 'intent', 'tone', 'audience', 'stability'}
-        
-        standard = {k: v for k, v in data.items() if k in standard_fields}
-        custom = {k: v for k, v in data.items() if k not in standard_fields}
+        standard = {k: v for k, v in data.items() if k in STANDARD_FIELDS}
+        custom = {k: v for k, v in data.items() if k not in STANDARD_FIELDS}
         
         return cls(
             domain=standard.get('domain'),
@@ -108,6 +110,10 @@ class SemanticDescriptor:
             SemanticDescriptor instance
         """
         data = json.loads(json_str)
+        if not isinstance(data, dict):
+            raise ValidationError(
+                f"JSON must represent an object (dict), got {type(data).__name__}"
+            )
         return cls.from_dict(data)
     
     @classmethod
@@ -242,7 +248,7 @@ class SemanticDescriptor:
         """
         field_name = field_name.lower()
         
-        standard_fields = {
+        standard_fields_map = {
             'domain': self.domain,
             'intent': self.intent,
             'tone': self.tone,
@@ -250,8 +256,8 @@ class SemanticDescriptor:
             'stability': self.stability,
         }
         
-        if field_name in standard_fields:
-            return standard_fields[field_name]
+        if field_name in standard_fields_map:
+            return standard_fields_map[field_name]
         
         return self.custom_fields.get(field_name)
     
@@ -267,9 +273,7 @@ class SemanticDescriptor:
         normalized_value = normalize_value(value)
         normalized_field = field_name.lower()
         
-        standard_fields = {'domain', 'intent', 'tone', 'audience', 'stability'}
-        
-        if normalized_field in standard_fields:
+        if normalized_field in STANDARD_FIELDS:
             setattr(self, normalized_field, normalized_value)
         else:
             self.custom_fields[normalized_field] = normalized_value

@@ -15,15 +15,13 @@ from .errors import NormalizationError
 HIERARCHY_SEPARATOR = " → "
 
 # Alternative separators users might input
+# NOTE: "/" and "|" are intentionally excluded — they appear in legitimate schema
+# values (e.g. tone values) and must not be silently rewritten.
 ALTERNATIVE_SEPARATORS = [
     "->",
     "→",
     " > ",
     ">",
-    "/",
-    " / ",
-    "|",
-    " | ",
 ]
 
 

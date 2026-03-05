@@ -206,8 +206,10 @@ class TestExplainInvalid(unittest.TestCase):
     def test_explain_includes_suggestions(self):
         """Test that explanation includes suggestions."""
         explanation = self.validator.explain_invalid('domain', 'Biology')
-        # Should suggest related values
-        self.assertIn('Science', explanation.lower())
+        # Should suggest related values.
+        # Use 'science' (lowercase) because explain_invalid() now returns a plain
+        # str (ExplanationString was removed), so .lower() actually lowercases it.
+        self.assertIn('science', explanation.lower())
 
 
 class TestSemanticDescriptorValidation(unittest.TestCase):
