@@ -1,6 +1,6 @@
 # Semantic Dropdown Search
 
-> A lightweight, MIT-licensed semantic indexing layer that replaces hashtags with structured, human-selected dropdown descriptors.
+> A lightweight, non-commercially licensed semantic indexing layer that replaces hashtags with structured, human-selected dropdown descriptors.
 
 [![Version](https://img.shields.io/badge/version-1.0.0-orange.svg)](VERSION)
 [![CI](https://github.com/dfeen87/Semantic-Dropdown-Search/workflows/CI/badge.svg)](https://github.com/dfeen87/Semantic-Dropdown-Search/actions)
@@ -108,7 +108,7 @@ Instead of tagging text with free-form keywords, content is described using **fi
 - 🚫 **No Black Boxes** - Fully deterministic, no ML required
 - 🏗️ **Hierarchical** - First-class support for semantic hierarchies
 - 🔌 **Embeddable** - Integrate into any system, any platform
-- 📝 **Open Source** - MIT license, fork-friendly
+- 📝 **Open Source** - Non-commercial license, fork-friendly for non-commercial use
 
 ---
 
@@ -253,7 +253,7 @@ Every text object is paired with a **semantic descriptor object** chosen from dr
 | **Machine-readable by default** | Schemas are JSON-based and stable |
 | **No training, no tuning** | No hidden models or personalization |
 | **Platform-agnostic** | Works anywhere text exists |
-| **MIT-licensed** | Free to embed, fork, and extend |
+| **Non-commercially licensed** | Free to embed, fork, and extend for non-commercial use |
 
 ---
 

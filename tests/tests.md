@@ -329,4 +329,4 @@ When adding features:
 
 ## License
 
-MIT License - See `../LICENSE` for details
+Non-Commercial License - See `../LICENSE` for details
