@@ -16,8 +16,9 @@ This directory contains unit tests for all core functionality:
 | `test_schema.py` | Schema loading and structure | ~30 tests |
 | `test_validation.py` | Descriptor validation | ~40 tests |
 | `test_query.py` | Query functionality | ~40 tests |
+| `test_security_robustness.py` | Security and robustness | ~50 tests |
 
-**Total: ~110 tests**
+**Total: ~160 tests**
 
 ## Running Tests
 
@@ -280,7 +281,7 @@ export PYTHONPATH="${PYTHONPATH}:$(pwd)"
 
 ### Current Status
 
-- **Total Tests**: ~110
+- **Total Tests**: ~160
 - **Pass Rate**: 100%
 - **Coverage**: ~90%+
 - **Runtime**: <5 seconds
@@ -292,6 +293,7 @@ export PYTHONPATH="${PYTHONPATH}:$(pwd)"
 | Core | 40 | 95% |
 | Indexer | 30 | 90% |
 | Query | 40 | 90% |
+| Security | 50 | 90% |
 
 ## Future Tests
 

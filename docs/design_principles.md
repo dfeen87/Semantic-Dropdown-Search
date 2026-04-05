@@ -192,9 +192,9 @@ The system can act as:
 
 ---
 
-## 12. Version 1.0.0 Commitment
+## 12. Stability Commitment
 
-Version 1.0.0 represents:
+Each stable major version represents:
 
 - stable semantics,
 - predictable behavior,
@@ -215,6 +215,4 @@ They prioritize:
 - and durability over speed.
 
 This is a system designed to age well.
-
-
 
