@@ -2,7 +2,7 @@
 
 > A lightweight, non-commercially licensed semantic indexing layer that replaces hashtags with structured, human-selected dropdown descriptors.
 
-[![Version](https://img.shields.io/badge/version-1.0.0-orange.svg)](VERSION)
+[![Version](https://img.shields.io/badge/version-1.4.0-orange.svg)](VERSION)
 [![CI](https://github.com/dfeen87/Semantic-Dropdown-Search/workflows/CI/badge.svg)](https://github.com/dfeen87/Semantic-Dropdown-Search/actions)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 
@@ -48,7 +48,7 @@ import sys
 sys.path.insert(0, '.')
 
 from core.descriptor import SemanticDescriptor
-from indexer.index_text import TextIndex, IndexedText
+from indexer.index_text import TextIndex
 from query.query_builder import QueryBuilder
 
 # Create a descriptor
@@ -62,15 +62,13 @@ desc = SemanticDescriptor(
 
 # Index some content
 index = TextIndex()
-item = IndexedText(
+index.add(
     text="Exploring semantic classification frameworks",
     descriptor=desc
 )
-index.add(item)
 
 # Query it
-query = QueryBuilder().filter_domain("Science").build()
-results = index.search(query)
+results = QueryBuilder(index).where_domain("Science").execute()
 print(f"Found {len(results)} results matching 'Science'")
 EOF
 ```
@@ -83,7 +81,7 @@ EOF
 
 | Aspect | Status |
 |--------|--------|
-| **Current Version** | v1.0.0 (Stable) |
+| **Current Version** | v1.4.0 (Stable) |
 | **Schema Stability** | ✅ v1 schemas are immutable |
 | **API Stability** | ✅ Stable, semantic versioning |
 | **Production Ready** | ✅ Yes |
@@ -266,7 +264,7 @@ semantic-dropdown-search/
 ├── 📄 LICENSE                
 ├── 📄 CITATION.cff           # Academic / research citation metadata
 ├── 📄 CHANGELOG.md           # Release history and notable changes
-├── 📄 VERSION                # Current package version (v1.0.0)
+├── 📄 VERSION                # Current package version (1.4.0)
 ├── 📁 .github/               # GitHub metadata (funding, workflows, templates)
 │
 ├── 📁 docs/                  # Conceptual and integration documentation
@@ -470,18 +468,21 @@ descriptor = SemanticDescriptor(
 ### 3. Index and Search
 
 ```python
-from indexer.index_text import index
+from indexer.index_text import TextIndex
 from query.query_builder import QueryBuilder
 
 # Index your content
-index(text="Your content here", descriptor=descriptor)
+index = TextIndex()
+index.add(text="Your content here", descriptor=descriptor)
 
 # Build precise queries
-query = QueryBuilder()
-    .filter_domain("Science → Biology")
-    .filter_stability("Hypothesis")
-    .filter_tone("Cautious")
-    .build()
+results = (
+    QueryBuilder(index)
+    .where_domain("Science → Biology")
+    .where_stability("Hypothesis (Not yet validated)")
+    .where_tone("Analytical / Cautious")
+    .execute()
+)
 ```
 
 See `examples/end_to_end.md` for complete workflows.
@@ -538,20 +539,18 @@ serialize_to_file(index, "my_index.json")
 
 ```python
 from query.query_builder import QueryBuilder
-from query.predicates import domain_matches, stability_equals
+from query.predicates import HierarchyMatches, FieldEquals
 
 # Build structured queries
-query = (QueryBuilder()
-    .where(domain_matches("Science → Biology"))
-    .where(stability_equals("Hypothesis"))
-    .build())
-
-# Execute query
-results = index.search(query)
+results = (
+    QueryBuilder(index)
+    .where(HierarchyMatches("domain", "Science → Biology"))
+    .where(FieldEquals("stability", "Hypothesis (Not yet validated)"))
+    .execute()
+)
 
 # Get explanations
-from query.explain import explain_query
-explanation = explain_query(query)
+explanation = results.query_explanation
 print(explanation)  # Human-readable query description
 ```
 
@@ -679,7 +678,7 @@ If you use this project in your research or product, please cite:
   author = {Feeney, Don Michael Jr.},
   title = {Semantic Dropdown Search},
   year = {2026},
-  url = {https://github.com/dfeen87/semantic-dropdown-search}
+  url = {https://github.com/dfeen87/Semantic-Dropdown-Search}
 }
 ```
 
@@ -773,7 +772,7 @@ For more help, see [FAQ](docs/faq.md) or [open an issue](https://github.com/dfee
 
 ## Roadmap
 
-### Current Status (v1.0.0)
+### Current Status (v1.4.0)
 
 ✅ Stable schema (v1)  
 ✅ Core validation and normalization  

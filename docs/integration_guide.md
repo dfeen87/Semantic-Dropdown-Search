@@ -284,7 +284,7 @@ Before production use:
 
 ## Status
 
-- **Integration Guide Version:** v1.0.0
+- **Integration Guide Version:** v1.4.0
 - **Schema Compatibility:** v1
 - **Stability:** Stable
 
@@ -300,4 +300,3 @@ Before production use:
 
 **Semantic meaning is a contract.**  
 **This system makes that contract explicit.**
-```

@@ -8,7 +8,7 @@ authors:
     given-names: Don Michael
     email: dfeen87@gmail.com
 license: non-commercial
-repository-code: https://github.com/dfeen87/semantic-dropdown-search
+repository-code: https://github.com/dfeen87/Semantic-Dropdown-Search
 keywords:
   - semantic-search
   - structured-metadata
@@ -22,5 +22,5 @@ abstract: >
   for indexing and querying text using structured dropdown semantics
   instead of hashtags. It enables deterministic, explainable search
   across social platforms, documentation systems, and content pipelines.
-version: 1.0.0
+version: 1.4.0
 date-released: 2026-01-18

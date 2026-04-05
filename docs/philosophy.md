@@ -111,9 +111,9 @@ No vendor lock-in. No hidden assumptions.
 
 ---
 
-## What v1.0.0 Means
+## What v1 Means
 
-Version 1.0.0 represents a commitment:
+Version 1 represents a commitment:
 
 - The **schema model is stable**.
 - Core semantics are finalized.
