@@ -1,6 +1,6 @@
 # Semantic Dropdown Search
 
-> A lightweight, non-commercially licensed semantic indexing layer that replaces hashtags with structured, human-selected dropdown descriptors.
+> A lightweight, MIT-licensed semantic indexing layer that replaces hashtags with structured, human-selected dropdown descriptors.
 
 [![Version](https://img.shields.io/badge/version-1.4.1-orange.svg)](VERSION)
 [![CI](https://github.com/dfeen87/Semantic-Dropdown-Search/workflows/CI/badge.svg)](https://github.com/dfeen87/Semantic-Dropdown-Search/actions)
@@ -106,7 +106,7 @@ Instead of tagging text with free-form keywords, content is described using **fi
 - 🚫 **No Black Boxes** - Fully deterministic, no ML required
 - 🏗️ **Hierarchical** - First-class support for semantic hierarchies
 - 🔌 **Embeddable** - Integrate into any system, any platform
-- 📝 **Open Source** - Non-commercial license, fork-friendly for non-commercial use
+- 📝 **Open Source** - 100% open-source under the MIT License, free to use and fork
 
 ---
 
@@ -251,7 +251,7 @@ Every text object is paired with a **semantic descriptor object** chosen from dr
 | **Machine-readable by default** | Schemas are JSON-based and stable |
 | **No training, no tuning** | No hidden models or personalization |
 | **Platform-agnostic** | Works anywhere text exists |
-| **Non-commercially licensed** | Free to embed, fork, and extend for non-commercial use |
+| **MIT Licensed** | Free to embed, fork, modify, and extend under the MIT License |
 
 ---
 
@@ -880,6 +880,11 @@ When embedding Semantic Dropdown Search:
 - ❌ **Don't** trust descriptors from untrusted sources without validation
 - ❌ **Don't** expose raw file system paths via serialization adapters
 - ❌ **Don't** store sensitive data in semantic descriptor fields
+
+---
+
+## Enterprise Consulting & Integration
+This architecture is fully open-source under the MIT License. If your organization requires custom scaling, proprietary integration, or dedicated technical consulting to deploy these models at an enterprise level, please reach out at: dfeen87@gmail.com
 
 ---
 
