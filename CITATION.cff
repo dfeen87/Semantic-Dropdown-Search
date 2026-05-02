@@ -7,7 +7,7 @@ authors:
   - family-names: Feeney
     given-names: Don Michael
     email: dfeen87@gmail.com
-license: non-commercial
+license: MIT
 repository-code: https://github.com/dfeen87/Semantic-Dropdown-Search
 keywords:
   - semantic-search
