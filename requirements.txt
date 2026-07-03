@@ -1,7 +1,7 @@
-fastapi==0.109.2
+fastapi==0.110.0
 starlette==0.40.0
 anyio==4.14.1
-click==8.4.2
+click==8.1.8
 uvicorn==0.29.0
 
 httpx
