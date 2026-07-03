@@ -22,10 +22,10 @@ mdurl==0.1.2
 mpmath==1.3.0
 narwhals==2.23.0
 
-# FIXED: networkx version actually exists
+# networkx: real versions only
 networkx>=3.3,<3.5
 
-# FIXED: numpy version actually exists for Python 3.9–3.12
+# numpy: compatible across Python 3.9–3.12
 numpy>=2.0,<2.3
 
 packaging==26.2
@@ -38,19 +38,19 @@ Pygments==2.20.0
 pytest==9.1.1
 PyYAML==6.0.3
 
-# FIXED: regex future version removed
+# regex: remove future-dated versions
 regex>=2024.0.0
 
 rich==15.0.0
 safetensors==0.8.0
 
-# FIXED: scikit-learn version actually exists
+# scikit-learn: highest stable versions available
 scikit-learn>=1.5,<1.8
 
-# FIXED: scipy version actually exists
+# scipy: compatible wheels for 3.9–3.12
 scipy>=1.10,<1.14
 
-# FIXED: sentence-transformers version actually exists
+# sentence-transformers: real versions only
 sentence-transformers>=2.6,<2.7
 
 setuptools==81.0.0
@@ -60,12 +60,12 @@ sympy==1.14.0
 threadpoolctl==3.6.0
 tokenizers==0.22.2
 
-# FIXED: torch version actually exists for Python 3.9–3.12
+# torch: stable CPU wheels for CI
 torch>=2.2,<2.3
 
 tqdm==4.68.3
 
-# FIXED: transformers version actually exists
+# transformers: stable versions only
 transformers>=4.40,<4.45
 
 typer==0.26.8
