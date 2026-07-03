@@ -1,6 +1,9 @@
 annotated-doc==0.0.4
 annotated-types==0.7.0
-anyio==4.14.1
+
+# anyio: Python 3.9 compatible
+anyio>=3.7,<4.0
+
 certifi>=2024.0.0
 click==8.4.2
 fastapi==0.139.0
@@ -50,7 +53,7 @@ sympy>=1.12
 threadpoolctl>=3.0.0
 tokenizers>=0.19.0
 
-torch>=2.1
+# torch installed separately as CPU-only
 tqdm==4.68.3
 transformers>=4.40
 
