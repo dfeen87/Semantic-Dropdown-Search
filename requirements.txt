@@ -1,11 +1,13 @@
 annotated-doc==0.0.4
 annotated-types==0.7.0
 
-# anyio: Python 3.9 compatible
-anyio>=3.7,<4.0
+# anyio: last version supporting Python 3.9
+anyio==3.7.1
+
+# click: last version supporting Python 3.9
+click==8.1.8
 
 certifi>=2024.0.0
-click==8.4.2
 fastapi==0.139.0
 filelock==3.29.5
 fsspec>=2024.0.0
@@ -42,6 +44,7 @@ regex>=2024.0.0
 rich==15.0.0
 safetensors>=0.4.0
 
+# ML stack loosened for Python 3.9 compatibility
 scikit-learn>=1.3
 scipy>=1.10
 sentence-transformers>=2.2
