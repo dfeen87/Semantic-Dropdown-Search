@@ -894,3 +894,55 @@ This architecture is fully open-source under the MIT License. If your organizati
 **Built for clarity. Designed to be embedded.**
 
 </div>
+
+## API Documentation
+
+The REST API layer exposes the core deterministic logic along with an optional embedding-based search layer, accessible via `FastAPI`.
+
+### Embedding in Browsers / Search Widgets
+
+The API enables `CORS` by default for all origins, allowing you to easily hit it via XHR/Fetch from browser extensions, client applications, or Javascript-embedded search widgets on any website.
+
+### Starting the Server
+1. Install requirements: `pip install -r requirements.txt`
+2. Start API: `uvicorn api.main:app --host 0.0.0.0 --port 8000`
+
+### Example Integration
+
+**1. Set Configuration**
+```javascript
+fetch("http://localhost:8000/semantic-config", {
+  method: "PATCH",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    "engine_mode": "hybrid",
+    "embedding_enabled": true
+  })
+});
+```
+
+**2. Index Documents**
+```javascript
+fetch("http://localhost:8000/semantic-index", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    "items": [{
+      "id": "doc-1",
+      "text": "Understanding large language models in NLP",
+      "tags": ["ai", "research"],
+      "descriptor": {
+        "domain": "Computer Science",
+        "intent": "Research"
+      }
+    }]
+  })
+});
+```
+
+**3. Search**
+```javascript
+fetch("http://localhost:8000/semantic-search?q=machine learning")
+  .then(response => response.json())
+  .then(data => console.log(data.results));
+```
