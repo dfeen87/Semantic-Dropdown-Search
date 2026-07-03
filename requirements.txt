@@ -1,8 +1,12 @@
 annotated-doc
 annotated-types
+
 anyio>=3.7,<4.0
 click>=8.0,<8.2
-fastapi>=0.95,<0.110
+
+fastapi==0.109.2
+starlette==0.40.0
+
 filelock
 fsspec
 greenlet
@@ -39,7 +43,6 @@ scipy
 sentence-transformers
 setuptools
 shellingham
-starlette>=0.27,<0.40
 sympy
 threadpoolctl
 tokenizers
