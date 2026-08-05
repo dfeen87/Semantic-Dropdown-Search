@@ -1,3 +1,4 @@
+# Licensed under the PolyForm Noncommercial License 1.0.0
 from typing import Protocol, List, Optional, Dict, Any
 import numpy as np
 

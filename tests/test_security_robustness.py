@@ -1,3 +1,4 @@
+# Licensed under the PolyForm Noncommercial License 1.0.0
 """
 Tests for v1.4.1 security hardening, robustness, and architectural changes.
 
