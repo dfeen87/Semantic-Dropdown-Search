@@ -1,3 +1,4 @@
+# Licensed under the PolyForm Noncommercial License 1.0.0
 import numpy as np
 from typing import List, Optional, Dict, Any
 from fastapi import FastAPI, HTTPException, Query, Body, BackgroundTasks

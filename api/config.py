@@ -1,3 +1,4 @@
+# Licensed under the PolyForm Noncommercial License 1.0.0
 from typing import Literal
 from pydantic import BaseModel, Field
 

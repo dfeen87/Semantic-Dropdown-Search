@@ -1,3 +1,4 @@
+# Licensed under the PolyForm Noncommercial License 1.0.0
 """
 Test suite for Semantic Dropdown Search.
 

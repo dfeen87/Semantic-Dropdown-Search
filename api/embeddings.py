@@ -1,3 +1,4 @@
+# Licensed under the PolyForm Noncommercial License 1.0.0
 import logging
 from typing import List, Optional
 import numpy as np

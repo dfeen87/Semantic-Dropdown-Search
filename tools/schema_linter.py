@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Licensed under the PolyForm Noncommercial License 1.0.0
 """
 Schema Linter for Semantic Dropdown Search.
 

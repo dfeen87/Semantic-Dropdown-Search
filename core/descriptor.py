@@ -1,3 +1,4 @@
+# Licensed under the PolyForm Noncommercial License 1.0.0
 """
 Semantic Descriptor object for Semantic Dropdown Search.
 

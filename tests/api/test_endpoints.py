@@ -1,3 +1,4 @@
+# Licensed under the PolyForm Noncommercial License 1.0.0
 from fastapi.testclient import TestClient
 from api.main import app
 
