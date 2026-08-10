@@ -17,8 +17,8 @@ info:
   contact:
     name: Don Michael Feeney Jr.
   license:
-    name: PolyForm Noncommercial 1.0.0
-    url: https://polyformproject.org/licenses/noncommercial/1.0.0
+    name: MIT
+    url: https://opensource.org/licenses/MIT
 
 servers:
   - url: http://localhost:8000/api/v1

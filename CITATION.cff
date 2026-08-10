@@ -4,10 +4,10 @@ message: >
   If you use Semantic Dropdown Search in your work, please cite it as below.
 type: software
 authors:
-  - family-names: Feeney
+  - family-names: Feeney Jr.
     given-names: Don Michael
     email: dfeen87@gmail.com
-license: PolyForm Noncommercial 1.0.0
+license: MIT
 repository-code: https://github.com/dfeen87/Semantic-Dropdown-Search
 keywords:
   - semantic-search

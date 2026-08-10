@@ -1,8 +1,8 @@
 # Semantic Dropdown Search
 
-> A lightweight, PolyForm Noncommercial-licensed semantic indexing layer that replaces hashtags with structured, human-selected dropdown descriptors.
+> A lightweight, MIT-licensed semantic indexing layer that replaces hashtags with structured, human-selected dropdown descriptors.
 
-[![License: PolyForm Noncommercial](https://img.shields.io/badge/License-PolyForm_Noncommercial-red.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.4.1-orange.svg)](VERSION)
 [![CI](https://github.com/dfeen87/Semantic-Dropdown-Search/workflows/CI/badge.svg)](https://github.com/dfeen87/Semantic-Dropdown-Search/actions)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
@@ -107,7 +107,7 @@ Instead of tagging text with free-form keywords, content is described using **fi
 - 🚫 **No Black Boxes** - Fully deterministic, no ML required
 - 🏗️ **Hierarchical** - First-class support for semantic hierarchies
 - 🔌 **Embeddable** - Integrate into any system, any platform
-- 📝 **Source Available** - 100% source-available under the PolyForm Noncommercial License, free to use and fork for non-commercial purposes
+- 📝 **Open Source** - 100% open-source under the MIT License, free to use, modify, and distribute for any purpose
 
 ---
 
@@ -252,7 +252,7 @@ Every text object is paired with a **semantic descriptor object** chosen from dr
 | **Machine-readable by default** | Schemas are JSON-based and stable |
 | **No training, no tuning** | No hidden models or personalization |
 | **Platform-agnostic** | Works anywhere text exists |
-| **PolyForm Noncommercial** | Free to embed, fork, modify, and extend for non-commercial purposes |
+| **MIT License** | Free to embed, fork, modify, and distribute for any purpose |
 
 ---
 
@@ -657,14 +657,7 @@ I would like to acknowledge **Microsoft Copilot**, **Anthropic Claude**, and **O
 
 ## License
 
-This project is licensed under the **PolyForm Noncommercial License 1.0.0** (see the [LICENSE](LICENSE) file for full terms).
-
-### Non-Commercial Terms Summary
-Under this license, you are free to use, modify, and distribute this software for any **non-commercial purpose**. This includes:
-- **Personal Use**: Research, testing, personal study, hobby projects, and other private non-commercial uses.
-- **Non-Commercial Organizations**: Use by educational institutions, charitable organizations, public research organizations, and government entities.
-
-**Commercial use** (such as using this software as part of a product or service that generates revenue, or for any commercial entity's business operations) is strictly prohibited and requires a separate commercial license from the author.
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for the full license text.
 
 ---
 
@@ -891,7 +884,7 @@ When embedding Semantic Dropdown Search:
 ---
 
 ## Enterprise Consulting & Integration
-This architecture is licensed under the PolyForm Noncommercial License. If your organization requires commercial usage, custom scaling, proprietary integration, or dedicated technical consulting to deploy these models at an enterprise level, please reach out at: dfeen87@gmail.com
+This project is licensed under the MIT License. If your organization requires custom scaling, proprietary integration, or dedicated technical consulting to deploy these models at an enterprise level, please reach out at: dfeen87@gmail.com
 
 ---
 
