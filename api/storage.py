@@ -41,6 +41,10 @@ class InMemoryBackend:
 
         if embedding is not None:
             self._embeddings[item.id] = embedding
+        else:
+            # Re-indexing text without a new embedding must not retain a vector
+            # that represents the previous content.
+            self._embeddings.pop(item.id, None)
 
     def get_all_items(self) -> List[IndexedText]:
         return self._index.get_all()

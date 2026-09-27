@@ -66,7 +66,7 @@ class SemanticConfigUpdate(BaseModel):
     engine_mode: Optional[str] = None
     embedding_enabled: Optional[bool] = None
     embedding_model: Optional[str] = None
-    max_results: Optional[int] = None
+    max_results: Optional[int] = Field(default=None, ge=0)
     fallback_keyword_search: Optional[bool] = None
 
 

@@ -116,14 +116,19 @@ def normalize_field_name(field_name: str) -> str:
     Returns:
         Normalized field name
     """
+    if not isinstance(field_name, str):
+        raise NormalizationError(
+            f"Field name must be string, got {type(field_name).__name__}"
+        )
+
     # Convert to lowercase
     normalized = field_name.lower()
     
     # Replace hyphens with underscores
     normalized = normalized.replace('-', '_')
     
-    # Remove any whitespace
-    normalized = normalized.replace(' ', '_')
+    # Normalize all whitespace consistently, including tabs and newlines.
+    normalized = re.sub(r'\s+', '_', normalized)
     
     return normalized
 

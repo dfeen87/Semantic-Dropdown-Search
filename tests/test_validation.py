@@ -226,6 +226,15 @@ class TestSemanticDescriptorValidation(unittest.TestCase):
         
         result = descriptor.validate()
         self.assertTrue(result.valid)
+
+    def test_field_access_uses_canonical_field_names(self):
+        """Dynamic field access should normalize names like construction does."""
+        descriptor = SemanticDescriptor(domain='Science', intent='Research')
+
+        descriptor.set_field('Review Status', 'Pending')
+
+        self.assertEqual(descriptor.get_field('review\tstatus'), 'Pending')
+        self.assertEqual(descriptor.custom_fields, {'review_status': 'Pending'})
     
     def test_descriptor_is_valid_method(self):
         """Test SemanticDescriptor.is_valid() method."""
