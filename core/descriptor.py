@@ -13,7 +13,7 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 
 from .validate import SchemaValidator, ValidationResult
-from .normalize import normalize_descriptor, normalize_value
+from .normalize import normalize_descriptor, normalize_field_name, normalize_value
 from .errors import ValidationError
 
 
@@ -248,7 +248,7 @@ class SemanticDescriptor:
         Returns:
             Field value, or None if not set
         """
-        field_name = field_name.lower()
+        field_name = normalize_field_name(field_name)
         
         standard_fields_map = {
             'domain': self.domain,
@@ -273,7 +273,7 @@ class SemanticDescriptor:
         """
         # Normalize value
         normalized_value = normalize_value(value)
-        normalized_field = field_name.lower()
+        normalized_field = normalize_field_name(field_name)
         
         if normalized_field in STANDARD_FIELDS:
             setattr(self, normalized_field, normalized_value)

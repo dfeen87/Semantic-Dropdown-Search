@@ -1,11 +1,15 @@
 # Copyright (c) Don Michael Feeney Jr.
 # Licensed under the MIT License.
+import numpy as np
 import pytest
 from fastapi.testclient import TestClient
 
 from api.main import app
 from api.config import config
 from api.main import storage
+from api.storage import InMemoryBackend
+from core import SemanticDescriptor
+from indexer import create_indexed_text
 
 client = TestClient(app)
 
@@ -15,6 +19,7 @@ def reset_state():
     storage.clear()
     config.engine_mode = "deterministic"
     config.embedding_enabled = False
+    config.max_results = 10
     yield
 
 def test_config_endpoints():
@@ -26,6 +31,29 @@ def test_config_endpoints():
     response = client.patch("/semantic-config", json={"engine_mode": "hybrid"})
     assert response.status_code == 200
     assert response.json()["engine_mode"] == "hybrid"
+
+    response = client.patch("/semantic-config", json={"max_results": -1})
+    assert response.status_code == 422
+    assert config.max_results == 10
+
+
+def test_reindex_without_embedding_removes_stale_vector():
+    backend = InMemoryBackend()
+    item = create_indexed_text(
+        "original text",
+        SemanticDescriptor(domain="Science", intent="Research"),
+    )
+    backend.store_item(item, np.array([1.0, 0.0]))
+
+    replacement = create_indexed_text(
+        "replacement text",
+        SemanticDescriptor(domain="Science", intent="Research"),
+    )
+    replacement.id = item.id
+    backend.store_item(replacement)
+
+    assert backend.get_embeddings([item.id]) == {}
+
 
 def test_index_and_search_deterministic():
     payload = {

@@ -18,6 +18,7 @@ class APIConfig(BaseModel):
     )
     max_results: int = Field(
         default=10,
+        ge=0,
         description="Maximum number of results to return per query."
     )
     fallback_keyword_search: bool = Field(
