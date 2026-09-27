@@ -1,7 +1,7 @@
 # Copyright (c) Don Michael Feeney Jr.
 # Licensed under the MIT License.
 """
-Tests for v1.4.1 security hardening, robustness, and architectural changes.
+Tests for security hardening, robustness, and architectural changes.
 
 Covers:
 - Path traversal rejection in DirectoryAdapter
@@ -15,7 +15,7 @@ Covers:
 - ALTERNATIVE_SEPARATORS no longer includes / or |
 - ExplanationString removed (explain_invalid returns plain str)
 - STANDARD_FIELDS constant
-- Version bump to 1.4.1
+- Version bump checks
 """
 
 import json
@@ -488,15 +488,15 @@ class TestCountUsesPaginatedTotal(unittest.TestCase):
 # -------------------------
 
 class TestVersion(unittest.TestCase):
-    """Test that version has been bumped to 1.4.1."""
+    """Test that version has been bumped to 2.1.0."""
 
     def test_core_version(self):
         import core
-        self.assertEqual(core.__version__, "1.4.1")
+        self.assertEqual(core.__version__, "2.1.0")
 
     def test_version_file(self):
         version_file = Path(__file__).parent.parent / "VERSION"
-        self.assertEqual(version_file.read_text().strip(), "1.4.1")
+        self.assertEqual(version_file.read_text().strip(), "2.1.0")
 
 
 # -------------------------

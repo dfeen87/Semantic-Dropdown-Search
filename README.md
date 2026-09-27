@@ -3,7 +3,7 @@
 > A lightweight, MIT-licensed semantic indexing layer that replaces hashtags with structured, human-selected dropdown descriptors.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.4.1-orange.svg)](VERSION)
+[![Version](https://img.shields.io/badge/version-2.1.0-orange.svg)](VERSION)
 [![CI](https://github.com/dfeen87/Semantic-Dropdown-Search/workflows/CI/badge.svg)](https://github.com/dfeen87/Semantic-Dropdown-Search/actions)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 
@@ -82,7 +82,7 @@ EOF
 
 | Aspect | Status |
 |--------|--------|
-| **Current Version** | v1.4.1 (Stable) |
+| **Current Version** | v2.1.0 (Stable) |
 | **Schema Stability** | ✅ v1 schemas are immutable |
 | **API Stability** | ✅ Stable, semantic versioning |
 | **Production Ready** | ✅ Yes |
@@ -265,7 +265,7 @@ semantic-dropdown-search/
 ├── 📄 LICENSE                
 ├── 📄 CITATION.cff           # Academic / research citation metadata
 ├── 📄 CHANGELOG.md           # Release history and notable changes
-├── 📄 VERSION                # Current package version (1.4.1)
+├── 📄 VERSION                # Current package version (2.1.0)
 ├── 📁 .github/               # GitHub metadata (funding, workflows, templates)
 │
 ├── 📁 docs/                  # Conceptual and integration documentation
@@ -772,7 +772,7 @@ For more help, see [FAQ](docs/faq.md) or [open an issue](https://github.com/dfee
 
 ## Roadmap
 
-### Current Status (v1.4.1)
+### Current Status (v2.1.0)
 
 ✅ Stable schema (v1)  
 ✅ Core validation and normalization  

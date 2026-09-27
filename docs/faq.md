@@ -298,7 +298,7 @@ Contributions should:
 
 ## Status
 
-**FAQ Version:** v1.4.1  
+**FAQ Version:** v2.1.0
 **Project Status:** Stable  
 **Schema Compatibility:** v1  
 
