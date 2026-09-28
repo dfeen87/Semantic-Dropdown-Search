@@ -3,7 +3,7 @@
 > A lightweight, MIT-licensed semantic indexing layer that replaces hashtags with structured, human-selected dropdown descriptors.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-2.1.0-orange.svg)](VERSION)
+[![Version](https://img.shields.io/badge/version-2.2.0-orange.svg)](VERSION)
 [![CI](https://github.com/dfeen87/Semantic-Dropdown-Search/workflows/CI/badge.svg)](https://github.com/dfeen87/Semantic-Dropdown-Search/actions)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 
@@ -21,6 +21,7 @@
 - [Use Cases](#use-cases)
 - [Philosophy](#philosophy)
 - [Installation](#installation)
+- [Docker Build](#docker-build)
 - [Getting Started](#getting-started)
 - [API Quick Reference](#api-quick-reference)
 - [Documentation](#documentation)
@@ -82,7 +83,7 @@ EOF
 
 | Aspect | Status |
 |--------|--------|
-| **Current Version** | v2.1.0 (Stable) |
+| **Current Version** | v2.2.0 (Stable) |
 | **Schema Stability** | ✅ v1 schemas are immutable |
 | **API Stability** | ✅ Stable, semantic versioning |
 | **Production Ready** | ✅ Yes |
@@ -265,7 +266,7 @@ semantic-dropdown-search/
 ├── 📄 LICENSE                
 ├── 📄 CITATION.cff           # Academic / research citation metadata
 ├── 📄 CHANGELOG.md           # Release history and notable changes
-├── 📄 VERSION                # Current package version (2.1.0)
+├── 📄 VERSION                # Current package version (2.2.0)
 ├── 📁 .github/               # GitHub metadata (funding, workflows, templates)
 │
 ├── 📁 docs/                  # Conceptual and integration documentation
@@ -436,6 +437,12 @@ You can integrate Semantic Dropdown Search into your project in several ways:
 - **Vendor**: Vendor the required modules into your project
 
 > **Note:** This is a library/framework, not a standalone application. It's designed to be embedded into your existing systems.
+
+---
+
+## Docker Build
+
+The development image uses a pinned Python base, runs as a non-root user, and invokes `make` as its entrypoint. Build it with `docker build -t semantic-dropdown-search .`, then mount a Make-based workspace at `/repro` when running it (for example, `docker run --rm -v "$PWD:/repro" semantic-dropdown-search test`).
 
 ---
 
@@ -772,7 +779,7 @@ For more help, see [FAQ](docs/faq.md) or [open an issue](https://github.com/dfee
 
 ## Roadmap
 
-### Current Status (v2.1.0)
+### Current Status (v2.2.0)
 
 ✅ Stable schema (v1)  
 ✅ Core validation and normalization  

@@ -488,15 +488,15 @@ class TestCountUsesPaginatedTotal(unittest.TestCase):
 # -------------------------
 
 class TestVersion(unittest.TestCase):
-    """Test that version has been bumped to 2.1.0."""
+    """Test that version has been bumped to 2.2.0."""
 
     def test_core_version(self):
         import core
-        self.assertEqual(core.__version__, "2.1.0")
+        self.assertEqual(core.__version__, "2.2.0")
 
     def test_version_file(self):
         version_file = Path(__file__).parent.parent / "VERSION"
-        self.assertEqual(version_file.read_text().strip(), "2.1.0")
+        self.assertEqual(version_file.read_text().strip(), "2.2.0")
 
 
 # -------------------------
