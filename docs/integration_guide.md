@@ -284,7 +284,7 @@ Before production use:
 
 ## Status
 
-- **Integration Guide Version:** v2.1.0
+- **Integration Guide Version:** v2.2.0
 - **Schema Compatibility:** v1
 - **Stability:** Stable
 
