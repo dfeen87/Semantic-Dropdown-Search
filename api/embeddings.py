@@ -45,6 +45,17 @@ def compute_similarity(query_emb: np.ndarray, doc_embs: np.ndarray) -> np.ndarra
     """
     Computes cosine similarity between a query embedding and a list of document embeddings.
     """
+    query_emb = np.asarray(query_emb)
+    doc_embs = np.asarray(doc_embs)
+    if query_emb.ndim != 1:
+        raise ValueError("query embedding must be a one-dimensional vector")
+    if doc_embs.ndim != 2:
+        raise ValueError("document embeddings must be a two-dimensional matrix")
+    if doc_embs.shape[1] != query_emb.shape[0]:
+        raise ValueError("query and document embedding dimensions must match")
+    if not np.all(np.isfinite(query_emb)) or not np.all(np.isfinite(doc_embs)):
+        raise ValueError("embeddings must contain only finite values")
+
     # Normalize vectors
     q_norm = np.linalg.norm(query_emb)
     if q_norm == 0:
@@ -54,7 +65,7 @@ def compute_similarity(query_emb: np.ndarray, doc_embs: np.ndarray) -> np.ndarra
 
     # Avoid division by zero
     valid_mask = d_norms != 0
-    scores = np.zeros(doc_embs.shape[0])
+    scores = np.zeros(doc_embs.shape[0], dtype=float)
 
     if np.any(valid_mask):
         scores[valid_mask] = np.dot(doc_embs[valid_mask], query_emb) / (d_norms[valid_mask] * q_norm)

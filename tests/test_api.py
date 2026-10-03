@@ -61,12 +61,12 @@ def test_index_and_search_deterministic():
             {
                 "id": "doc1",
                 "text": "Biology is the study of life",
-                "descriptor": {"domain": "Science -> Biology", "intent": "Education"}
+                "descriptor": {"domain": "Science -> Biology", "intent": "Documentation -> Tutorial"}
             },
             {
                 "id": "doc2",
                 "text": "Finance deals with money and investments",
-                "descriptor": {"domain": "Finance", "intent": "Informational"}
+                "descriptor": {"domain": "Business", "intent": "Report"}
             }
         ]
     }
@@ -82,7 +82,12 @@ def test_index_and_search_deterministic():
     assert data["results"][0]["id"] == "doc1"
     assert data["results"][0]["score"] == 1.0
 
-def test_index_and_search_hybrid_mocked():
+def test_index_and_search_hybrid_mocked(monkeypatch):
+    monkeypatch.setattr("api.main.load_embedding_model", lambda _name: True)
+    monkeypatch.setattr(
+        "api.main.compute_embeddings",
+        lambda texts: np.array([[1.0, 0.0] for _ in texts]),
+    )
     # Force enable embeddings
     client.patch("/semantic-config", json={
         "engine_mode": "hybrid",
@@ -94,7 +99,7 @@ def test_index_and_search_hybrid_mocked():
             {
                 "id": "doc-ai",
                 "text": "Artificial intelligence algorithms are complex",
-                "descriptor": {"domain": "Computer Science", "intent": "Research"}
+                "descriptor": {"domain": "Science -> Computer Science", "intent": "Research"}
             }
         ]
     }

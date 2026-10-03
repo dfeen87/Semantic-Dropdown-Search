@@ -230,11 +230,13 @@ Indexing and search map cleanly to REST or GraphQL.
 
 OpenAPI examples are provided in `api/openapi.yaml`.
 
-Typical API operations:
+Implemented API operations:
 
-- `POST /index`
-- `POST /search`
-- `GET /schema`
+- `GET` / `PATCH /semantic-config`
+- `POST /semantic-index`
+- `GET /semantic-search?q=...`
+
+The generated specification describes the exact runtime surface; schema inspection and structured predicate queries remain available through the Python API.
 
 ## 10. Backward Compatibility
 
@@ -284,7 +286,7 @@ Before production use:
 
 ## Status
 
-- **Integration Guide Version:** v2.2.0
+- **Integration Guide Version:** v3.0.0
 - **Schema Compatibility:** v1
 - **Stability:** Stable
 

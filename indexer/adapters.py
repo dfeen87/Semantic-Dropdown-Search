@@ -98,7 +98,7 @@ class FileAdapter(StorageAdapter):
         items = load_from_file(self.filepath, format=self.format)
 
         index = TextIndex(
-            validate_on_add=False,
+            validate_on_add=self.validate_on_load,
             schema_version=self.schema_version,
         )
 
@@ -210,7 +210,7 @@ class DirectoryAdapter(StorageAdapter):
 
     def load(self) -> TextIndex:
         index = TextIndex(
-            validate_on_add=False,
+            validate_on_add=self.validate_on_load,
             schema_version=self.schema_version,
         )
 

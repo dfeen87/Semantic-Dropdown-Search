@@ -22,5 +22,5 @@ abstract: >
   for indexing and querying text using structured dropdown semantics
   instead of hashtags. It enables deterministic, explainable search
   across social platforms, documentation systems, and content pipelines.
-version: 2.2.0
-date-released: 2026-01-18
+version: 3.0.0
+date-released: 2026-10-03
