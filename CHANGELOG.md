@@ -6,6 +6,31 @@ This project follows semantic versioning.
 
 ---
 
+## [3.0.0] — 2026-10-03
+
+### BEDROCK engineering baseline
+
+This major release preserves the schema/core/indexer/query/API architecture
+while making its validation and failure guarantees explicit.
+
+- API ingestion now rejects missing or invalid descriptors instead of retrying
+  with validation disabled, and batches commit atomically.
+- Index updates and bulk loads validate candidate state before commit, keeping
+  the prior index unchanged after rejection.
+- Persistence rejects mismatched content hashes, invalid timestamps, duplicate
+  IDs/content, and (by default) descriptors outside the selected schema.
+- Embedding activation fails closed and configuration patches roll back when a
+  requested model is unavailable.
+- Similarity calculations reject NaN, infinity, malformed ranks, and dimension
+  mismatches.
+- CI now covers Python 3.9–3.12, schema linting, source compilation, and release
+  version consistency in addition to the full test suite.
+
+These stricter malformed-input and failure contracts are intentional Semantic
+Versioning compatibility changes. See
+[`docs/bedrock_v3.md`](docs/bedrock_v3.md) for migration details, regression
+coverage, preserved architecture, and remaining deployment responsibilities.
+
 ## [1.0.0] — 2026-01-18
 
 ### Initial Stable Release

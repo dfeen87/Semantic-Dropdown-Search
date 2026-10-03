@@ -1,6 +1,7 @@
 # Copyright (c) Don Michael Feeney Jr.
 # Licensed under the MIT License.
 from typing import Protocol, List, Optional, Dict, Any
+import copy
 import numpy as np
 
 from indexer.index_text import IndexedText, TextIndex
@@ -12,6 +13,14 @@ class StorageBackend(Protocol):
 
     def get_all_items(self) -> List[IndexedText]:
         """Returns all stored items."""
+        ...
+
+    def store_items(
+        self,
+        items: List[IndexedText],
+        embeddings: Optional[List[Optional[np.ndarray]]] = None,
+    ) -> None:
+        """Atomically stores a batch and its aligned optional embeddings."""
         ...
 
     def get_embeddings(self, item_ids: List[str]) -> Dict[str, np.ndarray]:
@@ -45,6 +54,26 @@ class InMemoryBackend:
             # Re-indexing text without a new embedding must not retain a vector
             # that represents the previous content.
             self._embeddings.pop(item.id, None)
+
+    def store_items(
+        self,
+        items: List[IndexedText],
+        embeddings: Optional[List[Optional[np.ndarray]]] = None,
+    ) -> None:
+        """Store a batch atomically, leaving current state unchanged on failure."""
+        if embeddings is None:
+            embeddings = [None] * len(items)
+        if len(embeddings) != len(items):
+            raise ValueError("embeddings must align one-to-one with items")
+        ids = [item.id for item in items]
+        if len(ids) != len(set(ids)):
+            raise ValueError("duplicate item IDs in one batch are not allowed")
+
+        candidate = copy.deepcopy(self)
+        for item, embedding in zip(items, embeddings):
+            candidate.store_item(item, embedding)
+        self._index = candidate._index
+        self._embeddings = candidate._embeddings
 
     def get_all_items(self) -> List[IndexedText]:
         return self._index.get_all()

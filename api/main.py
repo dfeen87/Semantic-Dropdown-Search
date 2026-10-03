@@ -1,6 +1,7 @@
 # Copyright (c) Don Michael Feeney Jr.
 # Licensed under the MIT License.
 import numpy as np
+from contextlib import asynccontextmanager
 from typing import List, Optional, Dict, Any
 from fastapi import FastAPI, HTTPException, Query, Body, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,10 +16,19 @@ from api.config import config, APIConfig
 from api.embeddings import load_embedding_model, compute_embeddings, compute_similarity
 from api.storage import InMemoryBackend
 
+@asynccontextmanager
+async def lifespan(_app):
+    """Activate optional dependencies before accepting traffic."""
+    if config.embedding_enabled and not load_embedding_model(config.embedding_model):
+        raise RuntimeError(f"Embedding model unavailable: {config.embedding_model}")
+    yield
+
+
 app = FastAPI(
     title="Semantic Dropdown Search API",
     description="Deterministic semantic dropdown search, with optional embedding-based enhancement.",
-    version="1.0.0"
+    version="3.0.0",
+    lifespan=lifespan,
 )
 
 # Enable CORS for browser extensions, search widgets, etc.
@@ -32,13 +42,6 @@ app.add_middleware(
 
 # Initialize storage
 storage = InMemoryBackend()
-
-# --- Startup Event ---
-@app.on_event("startup")
-async def startup_event():
-    if config.embedding_enabled:
-        load_embedding_model(config.embedding_model)
-
 
 # --- Models ---
 
@@ -79,31 +82,27 @@ def get_config():
 
 @app.patch("/semantic-config", response_model=APIConfig)
 def update_config(update: SemanticConfigUpdate):
-    """Updates API configuration fields."""
-    if update.engine_mode is not None:
-        if update.engine_mode not in ["deterministic", "embedding", "hybrid"]:
-            raise HTTPException(status_code=400, detail="Invalid engine_mode")
-        config.engine_mode = update.engine_mode
+    """Updates API configuration fields only after dependencies are ready."""
+    changes = update.model_dump(exclude_none=True)
+    try:
+        candidate = config.model_copy(update=changes)
+        candidate = APIConfig.model_validate(candidate.model_dump())
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
-    if update.max_results is not None:
-        config.max_results = update.max_results
+    candidate_model = candidate.embedding_model
+    candidate_enabled = candidate.embedding_enabled
+    if candidate_enabled and (
+        not config.embedding_enabled or candidate_model != config.embedding_model
+    ):
+        if not load_embedding_model(candidate_model):
+            raise HTTPException(
+                status_code=503,
+                detail=f"Embedding model unavailable: {candidate_model}",
+            )
 
-    if update.fallback_keyword_search is not None:
-        config.fallback_keyword_search = update.fallback_keyword_search
-
-    if update.embedding_model is not None and update.embedding_model != config.embedding_model:
-        config.embedding_model = update.embedding_model
-        if config.embedding_enabled:
-            # Reload model immediately if enabled
-            success = load_embedding_model(config.embedding_model)
-            if not success:
-                raise HTTPException(status_code=500, detail=f"Failed to load model {config.embedding_model}")
-
-    if update.embedding_enabled is not None:
-        config.embedding_enabled = update.embedding_enabled
-        if config.embedding_enabled:
-            # Ensure model is loaded
-            load_embedding_model(config.embedding_model)
+    for field_name, value in candidate.model_dump().items():
+        setattr(config, field_name, value)
 
     return config
 
@@ -119,40 +118,19 @@ def index_items(request: IndexRequest):
     for item in request.items:
         desc_dict = item.descriptor or {}
 
-        # We assume users pass valid descriptor dicts according to schema v1.
-        # If missing required fields, provide defaults for the sake of the API.
-        if "domain" not in desc_dict:
-            desc_dict["domain"] = "General"
-        if "intent" not in desc_dict:
-            desc_dict["intent"] = "Unspecified"
-
-        descriptor = SemanticDescriptor.from_dict(desc_dict)
-
-        metadata = {}
-        if item.tags:
-            metadata["tags"] = item.tags
-        if item.id:
-            metadata["original_id"] = item.id
-
         try:
-            # We don't strictly validate on add to allow flexible ingestion,
-            # but create_indexed_text validates by default. We can disable it if needed,
-            # but let's try with validation=False for flexibility if it fails.
-            try:
-                indexed_text = create_indexed_text(
-                    text=item.text,
-                    descriptor=descriptor,
-                    metadata=metadata,
-                    validate=True
-                )
-            except Exception as e:
-                # Fallback without validation if strict schema v1 fails
-                indexed_text = create_indexed_text(
-                    text=item.text,
-                    descriptor=descriptor,
-                    metadata=metadata,
-                    validate=False
-                )
+            descriptor = SemanticDescriptor.from_dict(desc_dict)
+            metadata = {}
+            if item.tags:
+                metadata["tags"] = item.tags
+            if item.id:
+                metadata["original_id"] = item.id
+            indexed_text = create_indexed_text(
+                text=item.text,
+                descriptor=descriptor,
+                metadata=metadata,
+                validate=True,
+            )
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"Failed to create indexed text: {str(e)}")
 
@@ -167,10 +145,23 @@ def index_items(request: IndexRequest):
     if config.embedding_enabled and texts_to_embed:
         embeddings = compute_embeddings(texts_to_embed)
 
-    # Store everything
-    for i, idx_text in enumerate(items_to_store):
-        emb = embeddings[i] if embeddings is not None else None
-        storage.store_item(idx_text, emb)
+    if config.embedding_enabled and texts_to_embed and embeddings is None:
+        raise HTTPException(status_code=503, detail="Embedding computation unavailable")
+    if embeddings is not None:
+        embeddings = np.asarray(embeddings)
+        if (
+            embeddings.ndim != 2
+            or embeddings.shape[0] != len(items_to_store)
+            or embeddings.shape[1] == 0
+            or not np.all(np.isfinite(embeddings))
+        ):
+            raise HTTPException(status_code=503, detail="Embedding output is malformed")
+
+    vectors = list(embeddings) if embeddings is not None else None
+    try:
+        storage.store_items(items_to_store, vectors)
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=f"Failed to store batch: {exc}")
 
     return {"status": "success", "indexed_count": len(items_to_store)}
 
@@ -226,7 +217,13 @@ def search(
             valid_ids = list(embs_dict.keys())
             if valid_ids:
                 doc_embs = np.array([embs_dict[vid] for vid in valid_ids])
-                sim_scores = compute_similarity(q_vec, doc_embs)
+                try:
+                    sim_scores = compute_similarity(q_vec, doc_embs)
+                except ValueError as exc:
+                    raise HTTPException(
+                        status_code=503,
+                        detail=f"Embedding evidence is malformed: {exc}",
+                    ) from exc
 
                 for i, vid in enumerate(valid_ids):
                     score = float(sim_scores[i])

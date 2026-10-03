@@ -47,9 +47,26 @@ class IndexedText:
     content_hash: str = field(default="")
     
     def __post_init__(self):
-        """Generate content hash if not provided."""
-        if not self.content_hash:
-            self.content_hash = self._compute_hash()
+        """Validate the record's structural and content-hash invariants."""
+        if not isinstance(self.id, str) or not self.id:
+            raise IndexingError("Indexed text ID must be a non-empty string")
+        if not isinstance(self.text, str):
+            raise IndexingError("Indexed text content must be a string")
+        if not isinstance(self.descriptor, SemanticDescriptor):
+            raise IndexingError("descriptor must be a SemanticDescriptor")
+        if not isinstance(self.metadata, dict):
+            raise IndexingError("metadata must be a dictionary")
+        if not isinstance(self.created_at, datetime) or not isinstance(self.updated_at, datetime):
+            raise IndexingError("created_at and updated_at must be datetimes")
+        if self.created_at.tzinfo is None or self.updated_at.tzinfo is None:
+            raise IndexingError("created_at and updated_at must include a timezone")
+        if self.updated_at < self.created_at:
+            raise IndexingError("updated_at cannot be earlier than created_at")
+
+        expected_hash = self._compute_hash()
+        if self.content_hash and self.content_hash != expected_hash:
+            raise IndexingError("content_hash does not match serialized text")
+        self.content_hash = expected_hash
     
     def _compute_hash(self) -> str:
         """Compute SHA-256 hash of text content."""
@@ -184,8 +201,26 @@ class TextIndex:
         item = self._items.get(item_id)
         if not item:
             return None
-        
+
+        if descriptor is not None and not isinstance(descriptor, SemanticDescriptor):
+            raise IndexingError("descriptor must be a SemanticDescriptor")
+        if metadata is not None and not isinstance(metadata, dict):
+            raise IndexingError("metadata must be a dictionary")
+
+        # Validate every candidate before mutating the current valid item.  In
+        # particular, a bad descriptor must not leave a successful text update
+        # behind when both are supplied in one operation.
+        if descriptor is not None and self.validate_on_add:
+            result = descriptor.validate(schema_version=self.schema_version)
+            if not result:
+                raise IndexingError(
+                    "Descriptor validation failed: " + "; ".join(result.errors)
+                )
+
+        new_hash = None
         if text is not None:
+            if not isinstance(text, str):
+                raise IndexingError("Indexed text content must be a string")
             new_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
             if not allow_duplicates and new_hash in self._hash_to_id:
                 existing_id = self._hash_to_id[new_hash]
@@ -198,13 +233,6 @@ class TextIndex:
             self._hash_to_id[new_hash] = item_id
         
         if descriptor is not None:
-            if self.validate_on_add:
-                result = descriptor.validate(schema_version=self.schema_version)
-                if not result:
-                    raise IndexingError(
-                        "Descriptor validation failed: "
-                        + "; ".join(result.errors)
-                    )
             item.update_descriptor(descriptor)
         
         if metadata is not None:
@@ -259,10 +287,47 @@ class TextIndex:
         return len(self._items)
     
     def bulk_load(self, items: List["IndexedText"]) -> None:
-        """Load items directly into the index, bypassing validation and dedup checks."""
+        """Atomically load records after enforcing index invariants.
+
+        Existing IDs may be replaced (the behavior used by storage backends),
+        but duplicate IDs or hashes within one incoming batch are rejected.
+        Descriptor validation follows ``validate_on_add``.
+        """
+        candidate_items = dict(self._items)
+        incoming_ids = set()
+        incoming_hashes = {}
+
         for item in items:
-            self._items[item.id] = item
-            self._hash_to_id[item.content_hash] = item.id
+            if not isinstance(item, IndexedText):
+                raise IndexingError("bulk_load accepts only IndexedText records")
+            if item.id in incoming_ids:
+                raise IndexingError(f"Duplicate item ID in bulk load: '{item.id}'")
+            incoming_ids.add(item.id)
+            other_id = incoming_hashes.get(item.content_hash)
+            if other_id is not None:
+                raise IndexingError(
+                    f"Duplicate content in bulk load (ids: {other_id}, {item.id})"
+                )
+            incoming_hashes[item.content_hash] = item.id
+            if self.validate_on_add:
+                result = item.descriptor.validate(schema_version=self.schema_version)
+                if not result:
+                    raise IndexingError(
+                        "Descriptor validation failed: " + "; ".join(result.errors)
+                    )
+            candidate_items[item.id] = item
+
+        candidate_hashes = {}
+        for item in candidate_items.values():
+            existing_id = candidate_hashes.get(item.content_hash)
+            if existing_id is not None and existing_id != item.id:
+                raise IndexingError(
+                    f"Duplicate content detected (ids: {existing_id}, {item.id})"
+                )
+            candidate_hashes[item.content_hash] = item.id
+
+        self._items = candidate_items
+        self._hash_to_id = candidate_hashes
     
     def clear(self):
         """Clear the index."""
