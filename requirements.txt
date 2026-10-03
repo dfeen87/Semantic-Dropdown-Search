@@ -1,7 +1,9 @@
 fastapi==0.115.0
 # DO NOT PIN STARLETTE — FastAPI will install the correct version automatically
 
-anyio==4.14.1
+# AnyIO 4.14+ requires Python >=3.10. 4.4.0 satisfies FastAPI/Starlette and
+# HTTPX/httpcore while preserving the project's tested Python 3.9 contract.
+anyio==4.4.0
 click==8.1.8
 uvicorn==0.29.0
 

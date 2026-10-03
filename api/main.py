@@ -177,7 +177,10 @@ def search(
     """
     effective_mode = mode if mode in ["deterministic", "embedding", "hybrid"] else config.engine_mode
 
-    all_items = storage.get_all_items()
+    # One snapshot keeps index records and their embedding evidence aligned
+    # even while another request commits a batch concurrently.
+    text_index, snapshot_embeddings = storage.get_state_snapshot()
+    all_items = text_index.get_all()
     if not all_items:
         return SearchResponse(query=q, results=[], mode=effective_mode)
 
@@ -189,7 +192,6 @@ def search(
 
     deterministic_scores = {}
     if effective_mode in ["deterministic", "hybrid"] or config.fallback_keyword_search:
-        text_index = storage.get_text_index()
         qb = QueryBuilder(text_index).where_text_contains(q, case_sensitive=False)
         det_results = qb.execute()
 
@@ -212,7 +214,11 @@ def search(
 
             # Fetch all items to compute similarity
             item_ids = [item.id for item in all_items]
-            embs_dict = storage.get_embeddings(item_ids)
+            embs_dict = {
+                item_id: snapshot_embeddings[item_id]
+                for item_id in item_ids
+                if item_id in snapshot_embeddings
+            }
 
             valid_ids = list(embs_dict.keys())
             if valid_ids:
